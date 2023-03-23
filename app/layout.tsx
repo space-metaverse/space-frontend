@@ -1,4 +1,13 @@
+"use client"
+
 import './globals.css'
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import { ThemeProvider } from '@mui/material';
+import { theme } from './theme';
+import TopNav from './components/TopNav';
 
 export const metadata = {
   title: 'Space',
@@ -12,7 +21,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <ThemeProvider theme={theme}>
+        <body>
+          <TopNav />
+          {children}
+        </body>
+      </ThemeProvider>
     </html>
   )
 }
