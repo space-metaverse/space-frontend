@@ -8,6 +8,7 @@ import '@fontsource/roboto/700.css';
 import { ThemeProvider } from '@mui/material';
 import { theme } from './theme';
 import TopNav from './components/TopNav';
+import Footer from './components/Footer';
 
 export default function RootLayout({
   children,
@@ -20,6 +21,7 @@ export default function RootLayout({
         <body>
           <TopNav />
           {children}
+          <Footer />
         </body>
       </ThemeProvider>
     </html>

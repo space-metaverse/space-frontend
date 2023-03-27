@@ -72,7 +72,7 @@ const LaunchCard = ({ title, price, image }: LaunchCardProps) => {
 
 const Launches = () => {
   return (
-    <Box pt={3}>
+    <Box pt={3} pb={5}>
       <Typography variant="h2" align="center" p={3} fontWeight={500}>
         Upcoming Launches
       </Typography>
