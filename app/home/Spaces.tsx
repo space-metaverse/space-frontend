@@ -1,61 +1,63 @@
 import { Typography, Card, CardMedia, CardContent, CardActions, Button, Box, Tabs } from "@mui/material"
 import Grid from "@mui/material/Unstable_Grid2/Grid2"
+import Image, { StaticImageData } from "next/image"
+import spaceImage from "../../public/space-store.png"
 
 const spacesMock = [
   {
     id: 1,
     title: 'Nike Store',
     owner: 'Nike',
-    image: "/space-store.png",
+    image: spaceImage,
   },
   {
     id: 1,
     title: 'Nike Store',
     owner: 'Nike',
-    image: "/space-store.png",
+    image: spaceImage,
   },
   {
     id: 1,
     title: 'Nike Store',
     owner: 'Nike',
-    image: "/space-store.png",
+    image: spaceImage,
   },
   {
     id: 1,
     title: 'Nike Store',
     owner: 'Nike',
-    image: "/space-store.png",
+    image: spaceImage,
   },
   {
     id: 1,
     title: 'Nike Store',
     owner: 'Nike',
-    image: "/space-store.png",
+    image: spaceImage,
   },
   {
     id: 1,
     title: 'Nike Store',
     owner: 'Nike',
-    image: "/space-store.png",
+    image: spaceImage,
   },
   {
     id: 1,
     title: 'Nike Store',
     owner: 'Nike',
-    image: "/space-store.png",
+    image: spaceImage,
   },
   {
     id: 1,
     title: 'Nike Store',
     owner: 'Nike',
-    image: "/space-store.png",
+    image: spaceImage,
   },
 ]
 
 interface SpaceCardProps {
   title: string
   owner: string
-  image: string
+  image: StaticImageData
 }
 
 const SpaceCard = ({ title, owner, image }: SpaceCardProps) => {
@@ -63,9 +65,10 @@ const SpaceCard = ({ title, owner, image }: SpaceCardProps) => {
     <Card>
       <CardMedia
         sx={{ height: 140 }}
-        image={image}
         title={title}
-      />
+      >
+        <Image src={image} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      </CardMedia>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {title}
