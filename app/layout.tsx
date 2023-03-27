@@ -9,11 +9,6 @@ import { ThemeProvider } from '@mui/material';
 import { theme } from './theme';
 import TopNav from './components/TopNav';
 
-export const metadata = {
-  title: 'Space',
-  description: 'Explore 3D e-commerce and meet your favorite creators.',
-}
-
 export default function RootLayout({
   children,
 }: {

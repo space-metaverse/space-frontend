@@ -88,8 +88,8 @@ const Spaces = () => {
       </Tabs>
       <Grid container pt={1} spacing={3}>
         {
-          spacesMock.map((space) => (
-            <Grid xs={12} md={4} key={space.title}>
+          spacesMock.map((space, index) => (
+            <Grid xs={12} md={4} key={space.title + index}>
               <SpaceCard
                 key={space.id}
                 title={space.title}
