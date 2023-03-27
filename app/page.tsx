@@ -3,6 +3,7 @@
 import { Box } from "@mui/system"
 import Events from "./home/Events"
 import Hero from "./home/Hero"
+import Spaces from "./home/Spaces"
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
     })}>
       <Hero />
       <Events />
+      <Spaces />
     </Box>
   )
 }

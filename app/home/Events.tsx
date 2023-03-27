@@ -1,8 +1,5 @@
 import { Typography, Card, CardMedia, CardContent, CardActions, Button } from "@mui/material"
 import Grid from "@mui/material/Unstable_Grid2/Grid2"
-import mileyImage from "../../public/miley.png"
-import lilX from "../../public/lil-x.png"
-import rapper from "../../public/rapper.png"
 
 const eventsMock = [
   {
