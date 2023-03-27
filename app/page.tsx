@@ -11,8 +11,8 @@ export default function Home() {
   return (
     <Box p={3} sx={(theme) => ({
       [theme.breakpoints.up('md')]: {
-        paddingRight: '10%',
-        paddingLeft: '10%',
+        paddingRight: '15%',
+        paddingLeft: '15%',
       },
     })}>
       <Hero />
