@@ -36,7 +36,7 @@ const TopNav = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ background: 'white', color: '#111114' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <RocketLaunch sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -51,7 +51,7 @@ const TopNav = () => {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: '#111114',
               textDecoration: 'none',
             }}
           >
@@ -107,7 +107,7 @@ const TopNav = () => {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: '#111114',
               textDecoration: 'none',
             }}
           >
@@ -118,7 +118,7 @@ const TopNav = () => {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, display: 'block', color: '#111114' }}
               >
                 {page}
               </Button>
