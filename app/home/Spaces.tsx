@@ -38,6 +38,18 @@ const spacesMock = [
     owner: 'Nike',
     image: "/space-store.png",
   },
+  {
+    id: 1,
+    title: 'Nike Store',
+    owner: 'Nike',
+    image: "/space-store.png",
+  },
+  {
+    id: 1,
+    title: 'Nike Store',
+    owner: 'Nike',
+    image: "/space-store.png",
+  },
 ]
 
 interface SpaceCardProps {
@@ -89,7 +101,7 @@ const Spaces = () => {
       <Grid container pt={1} spacing={3}>
         {
           spacesMock.map((space, index) => (
-            <Grid xs={12} md={4} key={space.title + index}>
+            <Grid xs={12} md={3} key={space.title + index}>
               <SpaceCard
                 key={space.id}
                 title={space.title}

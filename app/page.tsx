@@ -4,6 +4,7 @@ import { Box } from "@mui/system"
 import EmailSubscribe from "./home/EmailSubscribe"
 import Events from "./home/Events"
 import Hero from "./home/Hero"
+import Launches from "./home/Launches"
 import Spaces from "./home/Spaces"
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
       <Events />
       <Spaces />
       <EmailSubscribe />
+      <Launches />
     </Box>
   )
 }
