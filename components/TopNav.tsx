@@ -13,6 +13,10 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { RocketLaunch } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
+import Image from "next/image"
+import logoImage from "../public/logo.png"
+import Link from 'next/link';
+import { Stack } from '@mui/system';
 
 const pages = ['Stores', 'Events', 'Products', 'About'];
 
@@ -86,24 +90,11 @@ const TopNav = () => {
     <AppBar position="static" sx={{ background: 'white', color: '#111114' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <RocketLaunch sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: '#111114',
-              textDecoration: 'none',
-            }}
-          >
-            SPACE
-          </Typography>
+          <Link href="/" passHref style={{ marginRight: '1rem' }}>
+            <Stack>
+              <Image src={logoImage} alt="space-store" style={{ width: '60px', height: '100%', objectFit: 'cover' }} />
+            </Stack>
+          </Link>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -141,7 +132,6 @@ const TopNav = () => {
               ))}
             </Menu>
           </Box>
-          <RocketLaunch sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -158,7 +148,7 @@ const TopNav = () => {
               textDecoration: 'none',
             }}
           >
-            {username}
+            SPACE
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (

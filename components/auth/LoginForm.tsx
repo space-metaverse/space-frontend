@@ -15,7 +15,7 @@ import {
 } from "@space-metaverse-ag/space-ui";
 import { type AuthError, type LoginResponse, usePostLoginMutation } from "../../api/auth";
 import styled from "styled-components";
-import { setCookie, destroyCookie } from 'nookies'
+import { setCookie, deleteCookie } from 'cookies-next'
 
 import { useRouter } from "next/navigation";
 
@@ -49,7 +49,7 @@ const RememberAndForgot = styled.div`
   justify-content: space-between;
 `;
 
-function getCookieDomain (): string {
+function getCookieDomain(): string {
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
       return 'localhost'
@@ -111,10 +111,10 @@ const LoginForm: React.FC = () => {
       const hubsToken = postLoginData?.hubsToken as string;
 
       if (immerToken && hubsToken) {
-        setCookie(null, 'immerToken', immerToken, {
+        setCookie('immerToken', immerToken, {
           domain: getCookieDomain(),
         })
-        setCookie(null, 'hubsToken', hubsToken, {
+        setCookie('hubsToken', hubsToken, {
           domain: getCookieDomain(),
         })
         window.localStorage.setItem('immerToken', immerToken)
@@ -139,7 +139,10 @@ const LoginForm: React.FC = () => {
       } else {
         window.localStorage.removeItem("username");
         window.localStorage.removeItem("password");
-        destroyCookie(null, 'immerToken')
+        window.localStorage.removeItem('immerToken')
+        window.localStorage.removeItem('hubsToken')
+        deleteCookie('hubsToken')
+        deleteCookie('immerToken')
       }
       router.push("/");
     }

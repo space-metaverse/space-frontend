@@ -1,6 +1,7 @@
 import { Typography, Card, CardMedia, CardContent, CardActions, Button, Box, Tabs } from "@mui/material"
 import Grid from "@mui/material/Unstable_Grid2/Grid2"
 import Image, { StaticImageData } from "next/image"
+import { useRouter } from "next/navigation"
 import spaceImage from "../../public/space-store.png"
 
 const spacesMock = [
@@ -55,12 +56,15 @@ const spacesMock = [
 ]
 
 interface SpaceCardProps {
+  hubId: string
   title: string
   owner: string
   image: StaticImageData
 }
 
-const SpaceCard = ({ title, owner, image }: SpaceCardProps) => {
+const SpaceCard = ({ hubId, title, owner, image }: SpaceCardProps) => {
+  const router = useRouter()
+
   return (
     <Card>
       <CardMedia
@@ -78,7 +82,7 @@ const SpaceCard = ({ title, owner, image }: SpaceCardProps) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Visit Space</Button>
+        <Button size="small" onClick={() => router.push(`/spaces/${hubId}`)}>Visit Space</Button>
       </CardActions>
     </Card>
   )
@@ -107,6 +111,7 @@ const Spaces = () => {
             <Grid xs={12} md={3} key={space.title + index}>
               <SpaceCard
                 key={space.id}
+                hubId={'SgPdAJP'}
                 title={space.title}
                 owner={space.owner}
                 image={space.image}
