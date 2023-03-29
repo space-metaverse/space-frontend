@@ -9,6 +9,7 @@ import nikeImage from "../../../public/nike.png"
 import product1 from "../../../public/nike-1.png"
 import product2 from "../../../public/nike-2.png"
 import product3 from "../../../public/nike-3.png"
+import { formatCurrency } from "../../../helpers";
 
 const productsMock = [
   {
@@ -16,18 +17,21 @@ const productsMock = [
     title: 'Fly Boys v3',
     type: 'Phygital',
     image: product1,
+    price: 100,
   },
   {
     id: 1,
     title: 'Sport Kicks',
     type: 'Phygital',
     image: product2,
+    price: 200,
   },
   {
     id: 1,
     title: 'Jordans',
     type: 'Phygital',
     image: product3,
+    price: 300,
   }
 ]
 
@@ -35,9 +39,10 @@ interface ProductCardProps {
   type: string
   title: string
   image: StaticImageData
+  price: number
 }
 
-const ProductCard = ({ type, title, image }: ProductCardProps) => {
+const ProductCard = ({ type, title, image, price }: ProductCardProps) => {
   return (
     <Card>
       <CardMedia
@@ -52,6 +57,9 @@ const ProductCard = ({ type, title, image }: ProductCardProps) => {
         </Typography>
         <Typography gutterBottom variant="h5" component="div">
           {title}
+        </Typography>
+        <Typography gutterBottom variant="body1">
+          {formatCurrency(price)}
         </Typography>
       </CardContent>
       <CardActions>
