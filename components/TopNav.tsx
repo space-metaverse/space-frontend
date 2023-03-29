@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from 'react';
+import { useState, MouseEvent, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,13 +12,53 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { RocketLaunch } from '@mui/icons-material';
+import { useRouter } from 'next/navigation';
 
 const pages = ['Stores', 'Events', 'Products', 'About'];
-const settings = ['Profile', 'Logout'];
 
 const TopNav = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [username, setUsername] = useState<string>('');
+
+  const router = useRouter()
+
+  const settings = [
+    ...(!username ? ['Login'] : []),
+    ...(username ? ['Profile'] : []),
+    ...(username ? ['Logout'] : [])
+  ];
+
+  const handleNavigate = (page: string) => {
+    let path = '';
+    if (page === 'Stores') {
+      path = '/stores';
+    }
+    if (page === 'Events') {
+      path = '/events';
+    }
+    if (page === 'Products') {
+      path = '/products';
+    }
+    if (page === 'About') {
+      path = '/about';
+    }
+    if (page === 'Profile') {
+      path = '/profile';
+    }
+    if (page === 'Login') {
+      path = '/login';
+    }
+    if (page === 'Logout') {
+      path = '/login';
+      window.localStorage.removeItem('username');
+      window.localStorage.removeItem('immerToken');
+      window.localStorage.removeItem('hubsToken');
+    }
+    router.push(path);
+    handleCloseNavMenu();
+    handleCloseUserMenu();
+  }
 
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -34,6 +74,13 @@ const TopNav = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  useEffect(() => {
+    const username = window.localStorage.getItem('username');
+    if (username) {
+      setUsername(username);
+    }
+  }, [])
 
   return (
     <AppBar position="static" sx={{ background: 'white', color: '#111114' }}>
@@ -88,7 +135,7 @@ const TopNav = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={() => handleNavigate(page)}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -111,13 +158,13 @@ const TopNav = () => {
               textDecoration: 'none',
             }}
           >
-            Space
+            {username}
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={() => handleNavigate(page)}
                 sx={{ my: 2, display: 'block', color: '#111114' }}
               >
                 {page}
@@ -128,7 +175,7 @@ const TopNav = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Space" src="/static/images/avatar/2.jpg" />
+                <Avatar alt={username} src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -148,7 +195,7 @@ const TopNav = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={() => handleNavigate(setting)}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}

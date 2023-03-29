@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material"
 import Grid from "@mui/material/Unstable_Grid2/Grid2"
 import Image from "next/image"
-import logoImage from "../../public/logo.png"
+import logoImage from "../public/logo.png"
 
 const footerItems = [
   {
