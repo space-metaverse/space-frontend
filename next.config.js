@@ -14,13 +14,20 @@ const nextConfig = {
           loader: "file-loader",
           options: {
             name: "[name].[ext]",
-            outputPath: "static/media",
+            outputPath: "static/",
           }
         }
       ]
     })
     return config
   },
+  compiler: {
+    styledComponents: true
+  },
+
+  transpilePackages: [
+    '@space-metaverse-ag/space-ui'
+  ],
 }
 
 module.exports = nextConfig
