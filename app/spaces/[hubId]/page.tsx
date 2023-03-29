@@ -1,11 +1,65 @@
 "use client"
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { usePathname } from "next/navigation"
 import { useGetSpaceQuery } from "../../../api/space"
 import headerImage from "../../../public/space-header.png"
 import nikeImage from "../../../public/nike.png"
+import product1 from "../../../public/nike-1.png"
+import product2 from "../../../public/nike-2.png"
+import product3 from "../../../public/nike-3.png"
+
+const productsMock = [
+  {
+    id: 1,
+    title: 'Fly Boys v3',
+    type: 'Phygital',
+    image: product1,
+  },
+  {
+    id: 1,
+    title: 'Sport Kicks',
+    type: 'Phygital',
+    image: product2,
+  },
+  {
+    id: 1,
+    title: 'Jordans',
+    type: 'Phygital',
+    image: product3,
+  }
+]
+
+interface ProductCardProps {
+  type: string
+  title: string
+  image: StaticImageData
+}
+
+const ProductCard = ({ type, title, image }: ProductCardProps) => {
+  return (
+    <Card>
+      <CardMedia
+        sx={{ height: 140 }}
+        title={title}
+      >
+        <Image src={image} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      </CardMedia>
+      <CardContent>
+        <Typography variant="body2" color="text.secondary">
+          {type}
+        </Typography>
+        <Typography gutterBottom variant="h5" component="div">
+          {title}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button size="small">Buy Product</Button>
+      </CardActions>
+    </Card>
+  )
+}
 
 export default function Spaces() {
   const pathname = usePathname();
@@ -14,9 +68,11 @@ export default function Spaces() {
   const { data, error, isLoading } = useGetSpaceQuery({ hubId: String(hubId) }, { skip: !hubId })
 
   return (
-    <Box>
+    <Box pb={4}>
       <Image src={headerImage} alt={'header'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       <Grid container spacing={3} sx={(theme) => ({
+        paddingRight: '1rem',
+        paddingLeft: '1rem',
         [theme.breakpoints.up('md')]: {
           paddingRight: '15%',
           paddingLeft: '15%',
@@ -61,12 +117,24 @@ export default function Spaces() {
             <Typography variant="h5">
               Featured Products
             </Typography>
+            <Grid container spacing={3} sx={{ mt: 1 }}>
+              {productsMock.map((product) => (
+                <Grid xs={12} md={4} key={product.title}>
+                  <ProductCard {...product} />
+                </Grid>
+              ))}
+            </Grid>
           </Box>
         </Grid>
         <Grid xs={12} md={4}>
           <Box sx={{ border: '1px solid #e9e9e9', borderRadius: '10px', padding: '1rem 2rem', position: 'relative' }}>
             <Typography variant="h5">
               Categories
+            </Typography>
+          </Box>
+          <Box sx={{ border: '1px solid #e9e9e9', borderRadius: '10px', padding: '1rem 2rem', position: 'relative', mt: 3 }}>
+            <Typography variant="h5">
+              Communication
             </Typography>
           </Box>
         </Grid>
