@@ -14,7 +14,7 @@ const nextConfig = {
           loader: "file-loader",
           options: {
             name: "[name].[ext]",
-            outputPath: "static/videos/",
+            outputPath: "static/media",
           }
         }
       ]
