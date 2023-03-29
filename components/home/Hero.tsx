@@ -1,7 +1,6 @@
 import { Typography, Box } from "@mui/material"
 import Grid from "@mui/material/Unstable_Grid2/Grid2"
 import Image from "next/image"
-import heroImage from "../../public/hero.png"
 import logoImage from "../../public/logo.png"
 
 const Hero = () => {
@@ -15,7 +14,9 @@ const Hero = () => {
                 Store
               </Typography> in 3D
             </Typography>
-            <Image src={heroImage} alt="hero" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0 0 20px 20px' }} />
+            <video autoPlay loop muted style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0 0 20px 20px' }}>
+              <source src="/space-hero.mp4" type="video/mp4" />
+            </video>
           </Box>
         </Grid>
         <Grid xs={12} md={4} container>
