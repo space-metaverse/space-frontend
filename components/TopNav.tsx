@@ -1,22 +1,37 @@
 import { useState, MouseEvent, useEffect } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import { RocketLaunch } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import Image from "next/image"
 import logoImage from "../public/logo.png"
 import Link from 'next/link';
-import { Stack } from '@mui/system';
+import {
+  Badge,
+  Stack,
+  BadgeProps,
+  styled,
+  MenuItem,
+  Tooltip,
+  Button,
+  Avatar,
+  Container,
+  Menu,
+  Typography,
+  IconButton,
+  Toolbar,
+  Box,
+  AppBar,
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useAppSelector } from '../redux/hooks';
+
+const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: '0 4px',
+  },
+}));
 
 const pages = ['Stores', 'Events', 'Products', 'About'];
 
@@ -26,6 +41,7 @@ const TopNav = () => {
   const [username, setUsername] = useState<string>('');
 
   const router = useRouter()
+  const cartItems = useAppSelector((state) => state.cart.items);
 
   const settings = [
     ...(!username ? ['Login'] : []),
@@ -163,11 +179,18 @@ const TopNav = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={username} src="/static/images/avatar/2.jpg" />
+            <Stack direction="row" spacing={2}>
+              <IconButton aria-label="cart">
+                <StyledBadge badgeContent={String(cartItems.length ?? 0)} color="secondary">
+                  <ShoppingCartIcon />
+                </StyledBadge>
               </IconButton>
-            </Tooltip>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt={username} src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+            </Stack>
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"

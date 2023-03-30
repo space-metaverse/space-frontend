@@ -7,10 +7,13 @@ import headerImage from "../../../public/space-header.png"
 import product1 from "../../../public/nike-1.png"
 import { useState } from "react"
 import { Stack } from "@mui/system"
+import { useAppDispatch } from "../../../redux/hooks"
+import { addCartItem } from "../../../redux/slices/cart"
 
 const sizes = ['Size 1', 'Size 2', 'Size 3']
 
 export default function ProductPage() {
+  const dispatch = useAppDispatch()
   const [size, setSize] = useState(sizes[0])
 
   return (
@@ -44,7 +47,15 @@ export default function ProductPage() {
             <TextField label='Quantity' type='number' />
           </Stack>
           <Stack flexDirection='row' gap={3} mt={10}>
-            <Button variant='contained' color='primary' size="large" fullWidth>Add to cart</Button>
+            <Button
+              variant='contained'
+              color='primary'
+              size="large"
+              fullWidth
+              onClick={() => dispatch(addCartItem({ id: '1', title: 'Nike Air Max 270 React', price: 123.23, quantity: 1, size }))}
+            >
+              Add to cart
+            </Button>
             <Button variant='outlined' color='primary' size="large" fullWidth>Buy now</Button>
           </Stack>
         </Grid>
