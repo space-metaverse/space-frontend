@@ -2,7 +2,7 @@
 import { Box, Button, Card, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import Image, { StaticImageData } from "next/image";
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useGetSpaceQuery } from "../../../api/space"
 import headerImage from "../../../public/space-header.png"
 import nikeImage from "../../../public/nike.png"
@@ -13,21 +13,21 @@ import { formatCurrency } from "../../../helpers";
 
 const productsMock = [
   {
-    id: 1,
+    id: '1',
     title: 'Fly Boys v3',
     type: 'Phygital',
     image: product1,
     price: 100,
   },
   {
-    id: 1,
+    id: '2',
     title: 'Sport Kicks',
     type: 'Phygital',
     image: product2,
     price: 200,
   },
   {
-    id: 1,
+    id: '3',
     title: 'Jordans',
     type: 'Phygital',
     image: product3,
@@ -36,13 +36,15 @@ const productsMock = [
 ]
 
 interface ProductCardProps {
+  id: string
   type: string
   title: string
   image: StaticImageData
   price: number
 }
 
-const ProductCard = ({ type, title, image, price }: ProductCardProps) => {
+const ProductCard = ({ id, type, title, image, price }: ProductCardProps) => {
+  const router = useRouter()
   return (
     <Card>
       <CardMedia
@@ -63,7 +65,7 @@ const ProductCard = ({ type, title, image, price }: ProductCardProps) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Buy Product</Button>
+        <Button size="small" onClick={() => router.push(`/products/${id}`)}>Buy Product</Button>
       </CardActions>
     </Card>
   )
