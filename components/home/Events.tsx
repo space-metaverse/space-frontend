@@ -1,5 +1,6 @@
 import { Typography, Card, CardMedia, CardContent, CardActions, Button } from "@mui/material"
 import Grid from "@mui/material/Unstable_Grid2/Grid2"
+import { useRouter } from "next/navigation"
 
 const eventsMock = [
   {
@@ -9,13 +10,13 @@ const eventsMock = [
     image: "/miley.png",
   },
   {
-    id: 1,
+    id: 2,
     title: 'Lil Nas X',
     description: 'Get your satan on with a bad boy ;)',
     image: "/lil-x.png",
   },
   {
-    id: 1,
+    id: 3,
     title: 'Lil Yaughty',
     description: 'Gang, Gang, Gang, Gang... yeah.',
     image: "/rapper.png",
@@ -23,12 +24,15 @@ const eventsMock = [
 ]
 
 interface EventCardProps {
+  id: number
   title: string
   description: string
   image: string
 }
 
-const EventCard = ({ title, description, image }: EventCardProps) => {
+const EventCard = ({ id, title, description, image }: EventCardProps) => {
+  const router = useRouter()
+
   return (
     <Card>
       <CardMedia
@@ -48,8 +52,8 @@ const EventCard = ({ title, description, image }: EventCardProps) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Learn More</Button>
-        <Button size="small">Buy a Ticket</Button>
+        <Button size="small" onClick={() => router.push(`/events/${id}`)}>Learn More</Button>
+        <Button size="small" onClick={() => router.push(`/events/${id}`)}>Buy a Ticket</Button>
       </CardActions>
     </Card>
   )
@@ -62,6 +66,7 @@ const Events = () => {
         eventsMock.map((event) => (
           <Grid xs={12} md={4} key={event.title}>
             <EventCard
+              id={event.id}
               key={event.id}
               title={event.title}
               description={event.description}
