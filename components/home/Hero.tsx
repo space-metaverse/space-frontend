@@ -2,7 +2,6 @@ import { Typography, Box } from "@mui/material"
 import Grid from "@mui/material/Unstable_Grid2/Grid2"
 import Image from "next/image"
 import logoImage from "../../public/logo.png"
-import heroVideo from "../../public/space-hero.mp4"
 
 const Hero = () => {
   return (
@@ -16,7 +15,7 @@ const Hero = () => {
               </Typography> in 3D
             </Typography>
             <video autoPlay loop muted style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0 0 20px 20px' }}>
-              <source src={heroVideo} type="video/mp4" />
+              <source src={'https://public-space-assets.s3.us-west-2.amazonaws.com/space-hero.mp4'} type="video/mp4" />
             </video>
           </Box>
         </Grid>
