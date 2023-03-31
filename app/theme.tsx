@@ -25,6 +25,34 @@ export const theme = createTheme({
         }
       `,
     },
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: "contained" },
+          style: {
+            backgroundColor: 'blue',
+            borderRadius: 20,
+            "&:hover": {
+              backgroundColor: 'blue',
+              opacity: 0.8,
+            },
+          },
+        },
+        {
+          props: { variant: "outlined" },
+          style: {
+            color: 'blue',
+            borderColor: 'blue',
+            borderRadius: 20,
+            "&:hover": {
+              borderColor: 'blue',
+              opacity: 0.8,
+            },
+          },
+        },
+      ],
+
+    }
   },
   status: {
     danger: orange[500],
