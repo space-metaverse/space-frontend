@@ -12,7 +12,6 @@ interface EventCardProps {
   image: string
   startDate: number
   endDate: number
-  isLive: boolean
 }
 
 const CountdownRender = ({ hours, minutes, seconds, completed, isLive }: { hours: number, minutes: number, seconds: number, completed: boolean, isLive: boolean }) => {
