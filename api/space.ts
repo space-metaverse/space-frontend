@@ -204,6 +204,18 @@ export interface Event {
   title: string
 }
 
+export interface Room {
+  allow_promotion: boolean
+  commerce_type: string
+  created_by: number
+  description?: string
+  hub_id: string
+  name: string
+  screenshot_url: string
+  updated_at: string
+  url: string
+}
+
 const getBaseURL = (): string => {
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
@@ -325,6 +337,12 @@ export const spaceApi = createApi({
         method: 'GET',
       })
     }),
+    getAllRooms: builder.query<{ data: Room[] }, {}>({
+      query: () => ({
+        url: `/api/v1/all_rooms`,
+        method: 'GET',
+      })
+    }),
   })
 })
 
@@ -339,5 +357,6 @@ export const {
   usePatchFullfilOrderMutation,
   usePostOrderNotesMutation,
   useGetOrdersCountQuery,
-  useGetAllEventsQuery
+  useGetAllEventsQuery,
+  useGetAllRoomsQuery,
 } = spaceApi

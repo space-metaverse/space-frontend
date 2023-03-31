@@ -4,7 +4,13 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ['qa.tryspace.com', 'tryspace.com', 'localhost', 'https://public-space-assets.s3.us-west-2.amazonaws.com'],
+    domains: [
+      'qa.tryspace.com',
+      'tryspace.com',
+      'localhost',
+      'https://public-space-assets.s3.us-west-2.amazonaws.com',
+      'space-staging-assets.metaverse-demo.com',
+    ],
   },
   webpack: (config, options) => {
     config.module.rules.push({
