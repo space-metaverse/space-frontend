@@ -1,42 +1,7 @@
-import { Typography, Card, CardMedia, CardContent, CardActions, Button, Box, Tabs } from "@mui/material"
+import { Typography, Button, Box, Tabs } from "@mui/material"
 import Grid from "@mui/material/Unstable_Grid2/Grid2"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import spaceImage from "../../public/space-store.png"
 import { useGetAllRoomsQuery } from "@/api/space"
-
-interface SpaceCardProps {
-  hubId: string
-  title: string
-  owner: string
-  image: string
-}
-
-const SpaceCard = ({ hubId, title, owner, image }: SpaceCardProps) => {
-  const router = useRouter()
-
-  return (
-    <Card sx={{ height: '100%' }}>
-      <CardMedia
-        sx={{ height: 140 }}
-        title={title}
-      >
-        <Image src={image || spaceImage} alt={title} height={140} width={300} style={{ width: '100%', objectFit: 'cover' }} />
-      </CardMedia>
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          By: {owner}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" onClick={() => router.push(`/spaces/${hubId}`)}>Visit Space</Button>
-      </CardActions>
-    </Card>
-  )
-}
+import SpaceCard from "../SpaceCard"
 
 const Spaces = () => {
   const { data, error, isLoading } = useGetAllRoomsQuery({})

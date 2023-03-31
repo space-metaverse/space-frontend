@@ -33,7 +33,7 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   },
 }));
 
-const pages = ['Stores', 'Events', 'Products', 'About'];
+const pages = ['Spaces', 'Events', 'Products', 'About'];
 
 const TopNav = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -51,8 +51,8 @@ const TopNav = () => {
 
   const handleNavigate = (page: string) => {
     let path = '';
-    if (page === 'Stores') {
-      path = '/stores';
+    if (page === 'Spaces') {
+      path = '/spaces';
     }
     if (page === 'Events') {
       path = '/events';
