@@ -193,6 +193,17 @@ interface PostOrderNotesResponse {
   ok?: string
 }
 
+export interface Event {
+  description: string
+  end_date: number
+  event_sid: string
+  featured: true,
+  hub_sid: string
+  image_url: string
+  start_date: number
+  title: string
+}
+
 const getBaseURL = (): string => {
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
@@ -308,6 +319,12 @@ export const spaceApi = createApi({
         }
       })
     }),
+    getAllEvents: builder.query<{ data: Event[] }, {}>({
+      query: () => ({
+        url: `/api/v1/all_events`,
+        method: 'GET',
+      })
+    }),
   })
 })
 
@@ -321,5 +338,6 @@ export const {
   useGetSpaceOrdersQuery,
   usePatchFullfilOrderMutation,
   usePostOrderNotesMutation,
-  useGetOrdersCountQuery
+  useGetOrdersCountQuery,
+  useGetAllEventsQuery
 } = spaceApi
