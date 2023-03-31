@@ -8,7 +8,7 @@ export default function Spaces() {
   const { data, error, isLoading } = useGetAllRoomsQuery({})
 
   return (
-    <Box pl={3} pr={3} sx={{ minHeight: '80%' }}>
+    <Box pl={3} pr={3} pb={4} sx={{ minHeight: '80%' }}>
       <Typography variant="h2" align="center" p={3} fontWeight={500}>
         All Spaces
       </Typography>
