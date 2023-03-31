@@ -31,7 +31,7 @@ export default function EventPage() {
         <Grid xs={12} md={6}>
           {
             isLoading || !data?.image_url ? <Skeleton width='100%' height='50rem' /> : (
-              <Image src={data?.image_url} alt={'header'} width={100} height={100} style={{ width: '100%', height: '50rem', objectFit: 'cover' }} />
+              <Image src={data?.image_url} alt={'header'} width={1000} height={2000} style={{ width: '100%', height: '50rem', objectFit: 'cover' }} />
             )
           }
         </Grid>
