@@ -4,6 +4,7 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2"
 import { useRouter } from "next/navigation"
 import Carousel from 'react-material-ui-carousel'
 import Countdown from 'react-countdown';
+import LiveCountdown from "../LiveCountdown"
 
 interface EventCardProps {
   id: string
@@ -13,27 +14,6 @@ interface EventCardProps {
   startDate: number
   endDate: number
 }
-
-const CountdownRender = ({ hours, minutes, seconds, completed, isLive }: { hours: number, minutes: number, seconds: number, completed: boolean, isLive: boolean }) => {
-  if (isLive) {
-    return <Typography variant="h4" display="inline" pr={2}>
-      Live now!
-    </Typography>
-  } else if (completed && !isLive) {
-    return <Typography variant="h4" display="inline" pr={2}>
-      Ended
-    </Typography>
-  } else {
-    return <>
-      <Typography variant="h5" color="text.secondary" display="inline" pr={2}>
-        Live In:
-      </Typography>
-      <Typography variant="h4" display="inline" pr={2}>
-        {hours}h {minutes}m {seconds}s
-      </Typography>
-    </>;
-  }
-};
 
 const EventCard = ({ id, title, description, image, startDate, endDate }: EventCardProps) => {
   const router = useRouter()
@@ -54,7 +34,7 @@ const EventCard = ({ id, title, description, image, startDate, endDate }: EventC
         </Typography>
         <Countdown
           date={new Date(startDate * 1000).getTime()}
-          renderer={(props) => <CountdownRender
+          renderer={(props) => <LiveCountdown
             {...props}
             isLive={(new Date(startDate * 1000).getTime() < new Date().getTime()) && (new Date(endDate * 1000).getTime() > new Date().getTime())} />
           }

@@ -1,41 +1,70 @@
 "use client"
 
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
+import { Box, Button, Typography } from "@mui/material"
 import Grid from "@mui/material/Unstable_Grid2/Grid2"
 import Image from 'next/image'
 import headerImage from "../../../public/space-header.png"
-import event1 from "../../../public/miley.png"
 import { useState } from "react"
 import { Stack } from "@mui/system"
 import { useAppDispatch } from "../../../redux/hooks"
 import { addCartItem } from "../../../redux/slices/cart"
+import { useGetEventQuery } from "@/api/space"
+import { usePathname } from 'next/navigation'
+import { Skeleton } from "@space-metaverse-ag/space-ui"
+import Countdown from "react-countdown"
+import LiveCountdown from "../../../components/LiveCountdown"
 
 const sizes = ['Size 1', 'Size 2', 'Size 3']
 
 export default function EventPage() {
   const dispatch = useAppDispatch()
+  const pathname = usePathname()
+  const eventId = pathname.split('/')[2]
   const [size, setSize] = useState(sizes[0])
+
+  const { data, error, isLoading } = useGetEventQuery({ event_sid: eventId })
 
   return (
     <Box>
       <Image src={headerImage} alt={'header'} style={{ width: '100%', height: '10rem', objectFit: 'cover' }} />
       <Grid container>
         <Grid xs={12} md={6}>
-          <Image src={event1} alt={'header'} style={{ width: '100%', height: '50rem', objectFit: 'cover' }} />
+          {
+            isLoading || !data?.image_url ? <Skeleton width='100%' height='50rem' /> : (
+              <Image src={data?.image_url} alt={'header'} width={100} height={100} style={{ width: '100%', height: '50rem', objectFit: 'cover' }} />
+            )
+          }
         </Grid>
         <Grid xs={12} md={6} p={5}>
           <Typography variant="h4" component="h1">
-            Miley Cyrus - Bangerz Tour Event
+            {data?.title}
           </Typography>
           <Typography variant="h6" pt={3}>
-            $3000.00
+            $69.00
           </Typography>
           <Typography variant="body1" pt={3}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquet nisl, eget aliquam nisl nisl eu nunc. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquet nisl, eget aliquam nisl nisl eu nunc.
+            {data?.description}
           </Typography>
           <Typography variant="h6" pt={3}>
-            LIVE IN 3d 4H 30M
+            {
+              data?.start_date && (
+                <Countdown
+                  date={new Date(data?.start_date * 1000).getTime()}
+                  renderer={(props) => <LiveCountdown
+                    {...props}
+                    isLive={(new Date(data?.start_date * 1000).getTime() < new Date().getTime()) && (new Date(data?.start_date * 1000).getTime() > new Date().getTime())} />
+                  }
+                />
+              )
+            }
           </Typography>
+          {
+            data?.start_date && (
+              <Typography variant="body1" pt={3}>
+                Ends at: {new Date(data?.end_date * 1000).toLocaleString()}
+              </Typography>
+            )
+          }
           <Stack flexDirection='row' gap={3} mt={10}>
             <Button
               variant='contained'

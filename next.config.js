@@ -10,6 +10,7 @@ const nextConfig = {
       'localhost',
       'https://public-space-assets.s3.us-west-2.amazonaws.com',
       'space-staging-assets.metaverse-demo.com',
+      'hub-event-images.s3.us-east-2.amazonaws.com',
     ],
   },
   webpack: (config, options) => {

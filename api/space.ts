@@ -204,6 +204,25 @@ export interface Event {
   title: string
 }
 
+interface GetEventResponse {
+  description: string
+  end_date: number
+  event_sid: string
+  featured: boolean
+  hub_sid: string
+  image_url: string
+  start_date: number
+  timeslots: Array<{
+    end_date: number
+    price: number
+    quantity: number
+    start_date: number
+    tickets: any[],
+    timeslot_sid: string
+  }>
+  title: string
+}
+
 export interface Room {
   allow_promotion: boolean
   commerce_type: string
@@ -343,6 +362,12 @@ export const spaceApi = createApi({
         method: 'GET',
       })
     }),
+    getEvent: builder.query<GetEventResponse, { event_sid: string }>({
+      query: ({ event_sid }) => ({
+        url: `/api/v1/event_with_timeslots_and_tickets?event_sid=${event_sid}`,
+        method: 'GET',
+      })
+    }),
   })
 })
 
@@ -359,4 +384,5 @@ export const {
   useGetOrdersCountQuery,
   useGetAllEventsQuery,
   useGetAllRoomsQuery,
+  useGetEventQuery
 } = spaceApi
