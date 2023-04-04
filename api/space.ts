@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { getBaseURL } from './url'
 
 interface GetMySpacesRequest {
 }
@@ -235,21 +236,6 @@ export interface Room {
   url: string
 }
 
-const getBaseURL = (): string => {
-  switch (process.env.NEXT_PUBLIC_ENV) {
-    case 'local':
-      return 'https://metaverse-demo.com'
-    case 'dev':
-      return 'https://dev1-metaverse.com'
-    case 'qa':
-      return 'https://metaverse-demo.com'
-    case 'prod':
-      return 'https://app.tryspace.com'
-    default:
-      console.log('No ENV set')
-      return 'https://metaverse-demo.com'
-  }
-}
 
 export const spaceApi = createApi({
   reducerPath: 'spaceApi',
@@ -368,6 +354,12 @@ export const spaceApi = createApi({
         method: 'GET',
       })
     }),
+    getAllProducts: builder.query<any, {}>({
+      query: () => ({
+        url: `api/v1/all_products`,
+        method: 'GET',
+      })
+    }),
   })
 })
 
@@ -384,5 +376,6 @@ export const {
   useGetOrdersCountQuery,
   useGetAllEventsQuery,
   useGetAllRoomsQuery,
-  useGetEventQuery
+  useGetEventQuery,
+  useGetAllProductsQuery,
 } = spaceApi

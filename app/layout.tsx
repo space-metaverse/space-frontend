@@ -10,6 +10,7 @@ import { theme } from './theme';
 import TopNav from '../components/TopNav';
 import Footer from '../components/Footer';
 import { usePathname } from "next/navigation";
+import { LazyMotion, domAnimation } from "framer-motion"
 
 export default function RootLayout({
   children,
@@ -26,11 +27,13 @@ export default function RootLayout({
       <ReduxProvider store={store}>
         <SpaceThemeProvider>
           <ThemeProvider theme={theme}>
+            <LazyMotion features={domAnimation}>
             <body>
               {showNav && <TopNav />}
               {children}
               {showFooter && <Footer />}
             </body>
+            </LazyMotion>
           </ThemeProvider>
         </SpaceThemeProvider>
       </ReduxProvider>

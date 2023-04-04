@@ -180,7 +180,7 @@ const TopNav = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             <Stack direction="row" spacing={2}>
-              <IconButton aria-label="cart">
+              <IconButton aria-label="cart" onClick={() => router.push('/checkout')}>
                 <StyledBadge badgeContent={String(cartItems.length ?? 0)} color="secondary">
                   <ShoppingCartIcon />
                 </StyledBadge>
