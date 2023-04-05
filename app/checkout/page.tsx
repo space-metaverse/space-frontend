@@ -3,18 +3,25 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2"
 import { Typography, Box, Stack, Button } from "@mui/material"
 import CheckoutItem from "./CheckoutItem"
 import StripeCheckout from "../../components/StripeCheckout"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { getClientUrl } from "../../api/url"
 import { useLazyGetProductQuery, useGetCartItemsQuery } from "../../api/space"
 
 export default function Checkout() {
   const [isStripeOpen, setIsStripeOpen] = useState(false)
+  const [accountId, setAccountId] = useState('')
 
   const { data: cartData, error: cartError, isLoading: cartLoading } = useGetCartItemsQuery({
-    accountId: window.localStorage.getItem('accountId') as string
+    accountId
+  }, {
+    skip: !accountId
   })
 
   const [getProduct, { data: productData, isLoading: productLoading, isFetching: productFetching }] = useLazyGetProductQuery();
+
+  useEffect(() => {
+    setAccountId(window.localStorage.getItem('accountId') as string)
+  }, [])
 
   const products = useMemo(() => cartData?.data?.map(async (entry) => {
     if (entry?.item?.product) {
