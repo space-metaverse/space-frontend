@@ -18,11 +18,11 @@ export default function ProductsPage() {
             data?.products?.map((product: any, index: number) => (
               <Grid xs={12} md={3} key={product.id + index}>
                 <ProductCard
-                  productId={product.id}
+                  productId={product.product_variations?.[0]?.product_variation_sid}
                   title={product.name}
                   owner={product.commerce_type}
                   image={product.product_variations?.[0]?.thumbnail_url.startsWith('http') ? product.product_variations?.[0]?.thumbnail_url : null}
-                  price={product.product_variations?.[0]?.sale_price}
+                  price={product.product_variations?.[0]?.price}
                 />
               </Grid>
             ))

@@ -3,21 +3,25 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2"
 import Image from "next/image"
 
 interface CheckoutItemProps {
+  id: string
   title: string
   type: string
-  price: number
+  price: string
+  image: string
+  quantity: number
 }
 
-const CheckoutItem = ({ title, type, price }: CheckoutItemProps) => {
+const CheckoutItem = ({ id, title, type, price, image, quantity }: CheckoutItemProps) => {
   return (
     <Box sx={{ p: 5, borderBottom: '1px black solid' }}>
       <Grid container>
         <Grid xs={12} md={4}>
           <Image
-            src="/nike-1.png"
+            src={image}
             alt=''
-            width={150}
-            height={150}
+            width={400}
+            height={400}
+            style={{ width: '12rem', height: '12rem', objectFit: 'cover' }}
           />
         </Grid>
         <Grid xs={12} md={8}>
@@ -28,7 +32,10 @@ const CheckoutItem = ({ title, type, price }: CheckoutItemProps) => {
             {title}
           </Typography>
           <Typography variant="h5" fontWeight={500}>
-            ${price}.00
+            {price}
+          </Typography>
+          <Typography variant="subtitle1" mt={2}>
+            Quantity: {quantity}
           </Typography>
         </Grid>
       </Grid>

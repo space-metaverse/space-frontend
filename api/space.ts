@@ -407,9 +407,9 @@ export const spaceApi = createApi({
         body,
       })
     }),
-    getCartItems: builder.query<GetCartResponse, { accountId: string }>({
-      query: ({ accountId }) => ({
-        url: `api/v1/cart_items?account_id=${accountId}`,
+    getCartItems: builder.query<GetCartResponse, {}>({
+      query: () => ({
+        url: `api/v1/cart_items?account_id=${window.localStorage.getItem('accountId') as string}`,
         method: 'GET',
       })
     }),

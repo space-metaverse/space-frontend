@@ -6,33 +6,41 @@ import StripeCheckout from "../../components/StripeCheckout"
 import { useEffect, useMemo, useState } from "react"
 import { getClientUrl } from "../../api/url"
 import { useLazyGetProductQuery, useGetCartItemsQuery } from "../../api/space"
+import { formatCurrency } from "../../helpers"
 
 export default function Checkout() {
   const [isStripeOpen, setIsStripeOpen] = useState(false)
-  const [accountId, setAccountId] = useState('')
+  const [products, setProducts] = useState<any>([])
 
-  const { data: cartData, error: cartError, isLoading: cartLoading } = useGetCartItemsQuery({
-    accountId
-  }, {
-    skip: !accountId
-  })
+  const { data: cartData, error: cartError, isLoading: cartLoading } = useGetCartItemsQuery({})
 
   const [getProduct, { data: productData, isLoading: productLoading, isFetching: productFetching }] = useLazyGetProductQuery();
 
   useEffect(() => {
-    setAccountId(window.localStorage.getItem('accountId') as string)
-  }, [])
-
-  const products = useMemo(() => cartData?.data?.map(async (entry) => {
-    if (entry?.item?.product) {
-      const product = await getProduct({ productId: entry?.item?.product?.product_variation_sid })
-      return {
-        title: product?.data?.title,
-        type: product?.data?.type,
-        price: product?.data?.price
+    cartData?.data.forEach(async (entry: any) => {
+      if (entry?.quantity > 0) {
+        if (entry?.item?.product && entry?.item?.product?.product_variation_sid) {
+          const product = await getProduct({ productId: entry?.item?.product?.product_variation_sid })
+          if (product?.isSuccess) {
+            setProducts((oldProducts: any) => [...oldProducts, {
+              productId: entry?.item?.product?.product_variation_sid,
+              title: product?.data?.name,
+              type: 'product',
+              price: product?.data?.price,
+              quantity: entry?.quantity,
+              image: product?.data?.thumbnail_url
+            }])
+          }
+        }
       }
-    }
-  }), [cartData?.data, getProduct])
+    })
+  }, [cartData?.data, getProduct])
+
+  const totalPrice = useMemo(() => {
+    return formatCurrency(products.reduce((acc: number, curr: any) => {
+      return acc + (curr?.price * curr?.quantity)
+    }, 0))
+  }, [products])
 
   return (
     <>
@@ -47,27 +55,26 @@ export default function Checkout() {
           Checkout
         </Typography>
         <Grid container spacing={3}>
-          {Array.from({ length: 3 }).map((_, i) => (
+          {[...products].map((item, i) => (
             <Grid xs={12} key={i}>
-              <CheckoutItem title="Title" type="Type" price={100} />
+              <CheckoutItem
+                id={item.productId}
+                title={item.title}
+                type={item.type}
+                price={formatCurrency(Number(item.price))}
+                image={item.image}
+                quantity={item.quantity}
+              />
             </Grid>
           ))}
         </Grid>
         <Stack pt={3} pb={3} spacing={3}>
           <Stack flexDirection='row' justifyContent='space-between'>
             <Typography variant="h5" fontWeight={500}>
-              Subtotal
-            </Typography>
-            <Typography variant="h5" fontWeight={500}>
-              $500.00
-            </Typography>
-          </Stack>
-          <Stack flexDirection='row' justifyContent='space-between'>
-            <Typography variant="h5" fontWeight={500}>
               Taxes
             </Typography>
             <Typography variant="h5" fontWeight={500}>
-              $13.40
+              $0.00
             </Typography>
           </Stack>
           <Stack flexDirection='row' justifyContent='space-between'>
@@ -75,7 +82,7 @@ export default function Checkout() {
               Total
             </Typography>
             <Typography variant="h5" fontWeight={500}>
-              $513.40
+              {totalPrice}
             </Typography>
           </Stack>
         </Stack>
