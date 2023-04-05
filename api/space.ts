@@ -236,6 +236,46 @@ export interface Room {
   url: string
 }
 
+interface AddCartItemRequest {
+  account_id: string
+  item: {
+    product?: {
+      product_variation_sid: string
+    },
+    ticket?: {
+      timeslot_sid: string
+    }
+  },
+  quantity: number
+}
+
+interface AddCartItemResponse {
+  account_id: string
+  item: {
+    product?: {
+      product_variation_sid: string
+    },
+    ticket?: {
+      timeslot_sid: string
+    }
+  },
+  quantity: number
+}
+
+interface GetCartResponse {
+  data: Array<{
+    id: number
+    item: {
+      product?: {
+        product_variation_sid: string
+      },
+      ticket?: {
+        timeslot_sid: string
+      }
+    },
+    quantity: number
+  }>
+}
 
 export const spaceApi = createApi({
   reducerPath: 'spaceApi',
@@ -360,6 +400,25 @@ export const spaceApi = createApi({
         method: 'GET',
       })
     }),
+    addCartItem: builder.mutation<AddCartItemResponse, AddCartItemRequest>({
+      query: (body) => ({
+        url: `/api/v1/cart_items/add`,
+        method: 'POST',
+        body,
+      })
+    }),
+    getCartItems: builder.query<GetCartResponse, { accountId: string }>({
+      query: ({ accountId }) => ({
+        url: `api/v1/cart_items?account_id=${accountId}`,
+        method: 'GET',
+      })
+    }),
+    getProduct: builder.query<any, { productId: string }>({
+      query: ({ productId }) => ({
+        url: `api/v1/product_variation?product_variation_sid=${productId}`,
+        method: 'GET',
+      })
+    }),
   })
 })
 
@@ -378,4 +437,7 @@ export const {
   useGetAllRoomsQuery,
   useGetEventQuery,
   useGetAllProductsQuery,
+  useAddCartItemMutation,
+  useGetCartItemsQuery,
+  useLazyGetProductQuery,
 } = spaceApi

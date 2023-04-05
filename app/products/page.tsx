@@ -21,7 +21,8 @@ export default function ProductsPage() {
                   productId={product.id}
                   title={product.name}
                   owner={product.commerce_type}
-                  image={product.screenshot_url}
+                  image={product.product_variations?.[0]?.thumbnail_url.startsWith('http') ? product.product_variations?.[0]?.thumbnail_url : null}
+                  price={product.product_variations?.[0]?.sale_price}
                 />
               </Grid>
             ))

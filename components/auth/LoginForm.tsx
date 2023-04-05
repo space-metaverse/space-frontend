@@ -109,8 +109,9 @@ const LoginForm: React.FC = () => {
       const loginCode = postLoginData?.loginCode;
       const immerToken = postLoginData?.immerToken as string;
       const hubsToken = postLoginData?.hubsToken as string;
+      const accountId = postLoginData?.accountId as string;
 
-      if (immerToken && hubsToken) {
+      if (immerToken && hubsToken && accountId) {
         setCookie('immerToken', immerToken, {
           domain: getCookieDomain(),
         })
@@ -119,6 +120,7 @@ const LoginForm: React.FC = () => {
         })
         window.localStorage.setItem('immerToken', immerToken)
         window.localStorage.setItem('hubsToken', hubsToken)
+        window.localStorage.setItem('accountId', accountId)
       }
       if (loginCode) {
         const urlSearchParams = new URLSearchParams(window.location.search);
@@ -139,10 +141,6 @@ const LoginForm: React.FC = () => {
       } else {
         window.localStorage.removeItem("username");
         window.localStorage.removeItem("password");
-        window.localStorage.removeItem('immerToken')
-        window.localStorage.removeItem('hubsToken')
-        deleteCookie('hubsToken')
-        deleteCookie('immerToken')
       }
       router.push("/");
     }

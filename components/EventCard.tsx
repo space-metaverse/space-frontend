@@ -2,6 +2,9 @@ import { Typography, Card, CardMedia, CardContent, CardActions, Button, Stack } 
 import { useRouter } from "next/navigation"
 import Countdown from 'react-countdown';
 import LiveCountdown from "./LiveCountdown"
+import { useAppDispatch } from "../redux/hooks";
+import { useAddCartItemMutation } from "../api/space";
+import { addCartItem } from "../redux/slices/cart";
 
 interface EventCardProps {
   id: string
@@ -14,6 +17,29 @@ interface EventCardProps {
 
 const EventCard = ({ id, title, description, image, startDate, endDate }: EventCardProps) => {
   const router = useRouter()
+  const dispatch = useAppDispatch()
+
+  const [
+    postCartItem,
+    {
+      isLoading: postCartItemLoading,
+      isSuccess: postCartItemSuccess,
+      isError: postCartItemError,
+    },
+  ] = useAddCartItemMutation();
+
+  const handleAddCartItem = async (id: string) => {
+    await postCartItem({
+      account_id: window.localStorage.getItem('accountId') as string,
+      item: {
+        ticket: {
+          timeslot_sid: id
+        }
+      },
+      quantity: 1
+    })
+    dispatch(addCartItem({ item: { ticket: { timeslot_sid: id } }, quantity: 1 }))
+  }
 
   return (
     <Card sx={{ height: '100%' }}>
@@ -40,7 +66,7 @@ const EventCard = ({ id, title, description, image, startDate, endDate }: EventC
         </CardContent>
         <CardActions>
           <Button size="small" onClick={() => router.push(`/events/${id}`)} fullWidth color='secondary'>Learn More</Button>
-          <Button size="small" onClick={() => router.push(`/events/${id}`)} fullWidth color='primary'>Buy a Ticket</Button>
+          <Button size="small" onClick={() => handleAddCartItem(id)} fullWidth color='primary'>Add to Cart</Button>
         </CardActions>
       </Stack>
     </Card>

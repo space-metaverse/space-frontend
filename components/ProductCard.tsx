@@ -1,17 +1,45 @@
 import { Card, CardActions, CardContent, CardMedia, Typography, Button, Stack } from "@mui/material"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import { useAddCartItemMutation } from "@/api/space"
+import { useAppDispatch } from "../redux/hooks"
+import { addCartItem } from "../redux/slices/cart"
 import spaceImage from "../public/space-store.png"
+import { formatCurrency } from "../helpers"
 
 interface ProductCardProps {
   productId: string
   title: string
   owner: string
   image: string
+  price: number
 }
 
-const ProductCard = ({ productId, title, owner, image }: ProductCardProps) => {
+const ProductCard = ({ productId, title, owner, image, price }: ProductCardProps) => {
   const router = useRouter()
+  const dispatch = useAppDispatch()
+
+  const [
+    postCartItem,
+    {
+      isLoading: postCartItemLoading,
+      isSuccess: postCartItemSuccess,
+      isError: postCartItemError,
+    },
+  ] = useAddCartItemMutation();
+
+  const handleAddCartItem = async (productId: string) => {
+    await postCartItem({
+      account_id: window.localStorage.getItem('accountId') as string,
+      item: {
+        product: {
+          product_variation_sid: productId
+        }
+      },
+      quantity: 1
+    })
+    dispatch(addCartItem({ item: { product: { product_variation_sid: productId } }, quantity: 1 }))
+  }
 
   return (
     <Card sx={{ height: '100%' }}>
@@ -29,9 +57,13 @@ const ProductCard = ({ productId, title, owner, image }: ProductCardProps) => {
           <Typography variant="body2" color="text.secondary">
             {owner}
           </Typography>
+          <Typography variant="subtitle1">
+            {formatCurrency(Number(price) ?? 0)}
+          </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={() => router.push(`/product/${productId}`)} fullWidth>Visit Product</Button>
+          <Button size="small" onClick={() => router.push(`/product/${productId}`)} fullWidth color='secondary'>Visit Product</Button>
+          <Button size="small" onClick={() => handleAddCartItem(productId)} fullWidth color='primary'>Add to Cart</Button>
         </CardActions>
       </Stack>
     </Card >
