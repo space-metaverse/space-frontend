@@ -1,3 +1,5 @@
+import { useDeleteCartItemMutation } from "@/api/space"
+import { Delete } from "@mui/icons-material"
 import { Box, Typography } from "@mui/material"
 import Grid from "@mui/material/Unstable_Grid2/Grid2"
 import Image from "next/image"
@@ -9,9 +11,31 @@ interface CheckoutItemProps {
   price: string
   image: string
   quantity: number
+  refetchCart: () => void
 }
 
-const CheckoutItem = ({ id, title, type, price, image, quantity }: CheckoutItemProps) => {
+const CheckoutItem = ({ id, title, type, price, image, quantity, refetchCart }: CheckoutItemProps) => {
+  const [
+    deleteCartItem,
+    {
+      isLoading: deleteCartItemLoading,
+      isSuccess: deleteCartItemSuccess,
+      isError: deleteCartItemError,
+    },
+  ] = useDeleteCartItemMutation();
+
+  const handleDelete = async () => {
+    await deleteCartItem({
+      item: {
+        product: {
+          product_variation_sid: id
+        },
+      },
+      quantity: 1
+    })
+    refetchCart()
+  }
+
   return (
     <Box sx={{ p: 5, borderBottom: '1px black solid' }}>
       <Grid container>
@@ -37,6 +61,9 @@ const CheckoutItem = ({ id, title, type, price, image, quantity }: CheckoutItemP
           <Typography variant="subtitle1" mt={2}>
             Quantity: {quantity}
           </Typography>
+        </Grid>
+        <Grid xs={12} md={8}>
+          <Delete onClick={handleDelete} />
         </Grid>
       </Grid>
     </Box>

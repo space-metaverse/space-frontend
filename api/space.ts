@@ -237,7 +237,6 @@ export interface Room {
 }
 
 interface AddCartItemRequest {
-  account_id: string
   item: {
     product?: {
       product_variation_sid: string
@@ -275,6 +274,18 @@ interface GetCartResponse {
     },
     quantity: number
   }>
+}
+
+interface DeleteCartItemRequest {
+  item: {
+    product?: {
+      product_variation_sid: string
+    },
+    ticket?: {
+      timeslot_sid: string
+    }
+  },
+  quantity: number
 }
 
 export const spaceApi = createApi({
@@ -404,13 +415,26 @@ export const spaceApi = createApi({
       query: (body) => ({
         url: `/api/v1/cart_items/add`,
         method: 'POST',
-        body,
+        body: {
+          ...body,
+          account_id: window.localStorage.getItem('accountId') as string
+        }
       })
     }),
     getCartItems: builder.query<GetCartResponse, {}>({
       query: () => ({
         url: `api/v1/cart_items?account_id=${window.localStorage.getItem('accountId') as string}`,
         method: 'GET',
+      })
+    }),
+    deleteCartItem: builder.mutation<any, DeleteCartItemRequest>({
+      query: (body) => ({
+        url: `api/v1/cart_items/subtract`,
+        method: 'POST',
+        body: {
+          ...body,
+          account_id: window.localStorage.getItem('accountId') as string
+        }
       })
     }),
     getProduct: builder.query<any, { productId: string }>({
@@ -440,4 +464,6 @@ export const {
   useAddCartItemMutation,
   useGetCartItemsQuery,
   useLazyGetProductQuery,
+  useGetProductQuery,
+  useDeleteCartItemMutation,
 } = spaceApi

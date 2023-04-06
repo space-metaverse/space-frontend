@@ -1,23 +1,37 @@
-import { Card, CardActions, CardContent, CardMedia, Typography, Button, Stack } from "@mui/material"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { useAddCartItemMutation } from "@/api/space"
-import { useAppDispatch } from "../redux/hooks"
-import { addCartItem } from "../redux/slices/cart"
-import spaceImage from "../public/space-store.png"
-import { formatCurrency } from "../helpers"
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+  Button,
+  Stack,
+} from "@mui/material";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useAddCartItemMutation } from "@/api/space";
+import { useAppDispatch } from "../redux/hooks";
+import { addCartItem } from "../redux/slices/cart";
+import spaceImage from "../public/space-store.png";
+import { formatCurrency } from "../helpers";
 
 interface ProductCardProps {
-  productId: string
-  title: string
-  owner: string
-  image: string
-  price: number
+  productId: string;
+  title: string;
+  owner: string;
+  image: string;
+  price: number;
 }
 
-const ProductCard = ({ productId, title, owner, image, price }: ProductCardProps) => {
-  const router = useRouter()
-  const dispatch = useAppDispatch()
+const ProductCard = ({
+  productId,
+  title,
+  owner,
+  image,
+  price,
+}: ProductCardProps) => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const [
     postCartItem,
@@ -30,25 +44,32 @@ const ProductCard = ({ productId, title, owner, image, price }: ProductCardProps
 
   const handleAddCartItem = async (productId: string) => {
     await postCartItem({
-      account_id: window.localStorage.getItem('accountId') as string,
       item: {
         product: {
-          product_variation_sid: productId
-        }
+          product_variation_sid: productId,
+        },
       },
-      quantity: 1
-    })
-    dispatch(addCartItem({ item: { product: { product_variation_sid: productId } }, quantity: 1 }))
-  }
+      quantity: 1,
+    });
+    dispatch(
+      addCartItem({
+        item: { product: { product_variation_sid: productId } },
+        quantity: 1,
+      })
+    );
+  };
 
   return (
-    <Card sx={{ height: '100%' }}>
-      <Stack height='100%' justifyContent='space-between'>
-        <CardMedia
-          sx={{ height: 140 }}
-          title={title}
-        >
-          <Image src={image || spaceImage} alt={title} height={140} width={300} style={{ width: '100%', objectFit: 'cover' }} />
+    <Card sx={{ height: "100%" }}>
+      <Stack height="100%" justifyContent="space-between">
+        <CardMedia sx={{ height: 140 }} title={title}>
+          <Image
+            src={image || spaceImage}
+            alt={title}
+            height={140}
+            width={300}
+            style={{ width: "100%", objectFit: "cover" }}
+          />
         </CardMedia>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
@@ -62,12 +83,26 @@ const ProductCard = ({ productId, title, owner, image, price }: ProductCardProps
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={() => router.push(`/product/${productId}`)} fullWidth color='secondary'>Visit Product</Button>
-          <Button size="small" onClick={() => handleAddCartItem(productId)} fullWidth color='primary'>Add to Cart</Button>
+          <Button
+            size="small"
+            onClick={() => router.push(`/products/${productId}`)}
+            fullWidth
+            color="secondary"
+          >
+            Visit Product
+          </Button>
+          <Button
+            size="small"
+            onClick={() => handleAddCartItem(productId)}
+            fullWidth
+            color="primary"
+          >
+            Add to Cart
+          </Button>
         </CardActions>
       </Stack>
-    </Card >
-  )
-}
+    </Card>
+  );
+};
 
-export default ProductCard
+export default ProductCard;
