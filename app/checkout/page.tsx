@@ -35,7 +35,7 @@ const Checkout = () => {
   const [isStripeOpen, setIsStripeOpen] = useState(false);
   const [products, setProducts] = useState<any>([]);
   const [activeStep, setActiveStep] = useState<CheckoutStep>(
-    CheckoutStep.Shipping
+    CheckoutStep.Cart
   );
 
   const [email, setEmail] = useState("");
@@ -79,6 +79,7 @@ const Checkout = () => {
               ...oldProducts,
               {
                 productId: entry?.item?.product?.product_variation_sid,
+                hubId: entry?.hub_sid,
                 title: product?.data?.name,
                 type: "product",
                 price: product?.data?.price,
@@ -141,6 +142,7 @@ const Checkout = () => {
               <Grid xs={12} key={`${item.productId}-${i}`}>
                 <CheckoutItem
                   id={`${item.productId}-${i}`}
+                  hubId={item.hubId}
                   title={item.title}
                   type={item.type}
                   price={formatCurrency(Number(item.price))}

@@ -278,6 +278,7 @@ interface GetCartResponse {
 }
 
 interface DeleteCartItemRequest {
+  hub_sid: string
   item: {
     product?: {
       product_variation_sid: string
