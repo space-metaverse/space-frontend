@@ -424,7 +424,7 @@ export const spaceApi = createApi({
     }),
     getCartItems: builder.query<GetCartResponse, {}>({
       query: () => ({
-        url: `api/v1/cart_items?account_id=${window.localStorage.getItem('accountId') as string}`,
+        url: `api/v1/cart_items/all_hubs?account_id=${window.localStorage.getItem('accountId') as string}`,
         method: 'GET',
       })
     }),

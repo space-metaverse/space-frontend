@@ -11,7 +11,8 @@ const nextConfig = {
       'https://public-space-assets.s3.us-west-2.amazonaws.com',
       'space-staging-assets.metaverse-demo.com',
       'hub-event-images.s3.us-east-2.amazonaws.com',
-      'spaces-staging-assets.metaverse-demo.com'
+      'spaces-staging-assets.metaverse-demo.com',
+      'flagcdn.com'
     ],
   },
   webpack: (config, options) => {
