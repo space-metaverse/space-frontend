@@ -33,7 +33,7 @@ interface Props {
 const AuthWrapper: React.FC<Props> = ({ selectedTab }) => {
     const query = useSearchParams()
 
-    const forgotPasswordModal = query.get('forgotPasswordModal')
+    const forgotPasswordModal = query?.get('forgotPasswordModal')
     return (
         <Main>
             <SpaceLogo />

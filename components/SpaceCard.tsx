@@ -1,26 +1,37 @@
-import { Card, CardActions, CardContent, CardMedia, Typography, Button, Stack } from "@mui/material"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import spaceImage from "../public/space-store.png"
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+  Button,
+  Stack,
+} from "@mui/material";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import spaceImage from "../public/space-store.png";
 
 interface SpaceCardProps {
-  hubId: string
-  title: string
-  owner: string
-  image: string
+  hubId: string;
+  title: string;
+  owner: string;
+  image: string;
 }
 
 const SpaceCard = ({ hubId, title, owner, image }: SpaceCardProps) => {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
-    <Card sx={{ height: '100%' }}>
-      <Stack height='100%' justifyContent='space-between'>
-        <CardMedia
-          sx={{ height: 140 }}
-          title={title}
-        >
-          <Image src={image || spaceImage} alt={title} height={140} width={300} style={{ width: '100%', objectFit: 'cover' }} />
+    <Card sx={{ height: "100%" }}>
+      <Stack height="100%" justifyContent="space-between">
+        <CardMedia sx={{ height: 140 }} title={title}>
+          <Image
+            src={image || spaceImage}
+            alt={title}
+            height={140}
+            width={300}
+            style={{ width: "100%", objectFit: "cover" }}
+          />
         </CardMedia>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
@@ -31,11 +42,17 @@ const SpaceCard = ({ hubId, title, owner, image }: SpaceCardProps) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={() => router.push(`/spaces/${hubId}`)} fullWidth>Visit Space</Button>
+          <Button
+            size="small"
+            onClick={() => router.push(`/spaces/${hubId}`)}
+            fullWidth
+          >
+            Visit Space
+          </Button>
         </CardActions>
       </Stack>
-    </Card >
-  )
-}
+    </Card>
+  );
+};
 
-export default SpaceCard
+export default SpaceCard;

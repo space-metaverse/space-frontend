@@ -13,16 +13,16 @@
     "@emotion/styled": "^11.10.6",
     "@fontsource/inter": "^4.5.15",
     "@fontsource/roboto": "^4.5.8",
-    "@mui/icons-material": "^5.11.11",
+    "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.125",
-    "@mui/material": "^5.11.14",
+    "@mui/material": "^5.11.16",
     "@reduxjs/toolkit": "^1.9.3",
     "@space-metaverse-ag/space-ui": "^1.6.3",
     "@stripe/react-stripe-js": "^2.1.0",
     "@stripe/stripe-js": "^1.52.0",
     "cookies-next": "^2.1.1",
-    "framer-motion": "^10.10.0",
-    "next": "13.2.4",
+    "framer-motion": "^10.11.2",
+    "next": "13.3.0",
     "react": "18.2.0",
     "react-countdown": "^2.3.5",
     "react-dom": "18.2.0",
@@ -32,13 +32,13 @@
     "styled-components": "^5.3.9"
   },
   "devDependencies": {
-    "@types/node": "^18.15.5",
-    "@types/react": "18.0.28",
+    "@types/node": "^18.15.11",
+    "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
     "@types/styled-components": "^5.1.26",
-    "eslint": "8.36.0",
-    "eslint-config-next": "13.2.4",
+    "eslint": "8.38.0",
+    "eslint-config-next": "13.3.0",
     "file-loader": "^6.2.0",
-    "typescript": "5.0.2"
+    "typescript": "5.0.4"
   }
 }

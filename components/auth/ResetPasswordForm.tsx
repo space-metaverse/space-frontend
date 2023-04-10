@@ -110,9 +110,9 @@ const ResetPasswordForm = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const passwordRef = useRef<HTMLDivElement>(null);
 
-  const username = query.get('username');
-  const token = query.get('token');
-  const redirect = query.get('redirect');
+  const username = query?.get('username');
+  const token = query?.get('token');
+  const redirect = query?.get('redirect');
 
   const [
     resetPassword,

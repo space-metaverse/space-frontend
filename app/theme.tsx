@@ -1,19 +1,19 @@
 import { orange } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
 import "@fontsource/inter";
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
 export const theme = createTheme({
   typography: {
-    fontFamily: ['Aeroport', 'Inter', 'Roboto', 'sans-serif'].join(","),
+    fontFamily: ["Aeroport", "Inter", "Roboto", "sans-serif"].join(","),
     body1: {
-      fontFamily: 'Inter',
+      fontFamily: "Inter",
     },
     body2: {
-      fontFamily: 'Inter',
+      fontFamily: "Inter",
     },
   },
   components: {
@@ -30,10 +30,10 @@ export const theme = createTheme({
         {
           props: { variant: "contained" },
           style: {
-            backgroundColor: 'blue',
+            backgroundColor: "blue",
             borderRadius: 20,
             "&:hover": {
-              backgroundColor: 'blue',
+              backgroundColor: "blue",
               opacity: 0.8,
             },
           },
@@ -41,18 +41,17 @@ export const theme = createTheme({
         {
           props: { variant: "outlined" },
           style: {
-            color: 'blue',
-            borderColor: 'blue',
+            color: "blue",
+            borderColor: "blue",
             borderRadius: 20,
             "&:hover": {
-              borderColor: 'blue',
+              borderColor: "blue",
               opacity: 0.8,
             },
           },
         },
       ],
-
-    }
+    },
   },
   status: {
     danger: orange[500],

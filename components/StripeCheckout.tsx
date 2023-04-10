@@ -4,14 +4,16 @@ import {
   useStripe,
   useElements,
   Elements,
-} from '@stripe/react-stripe-js';
+} from "@stripe/react-stripe-js";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 import { useEffect } from "react";
 import { usePostPaymentIntentMutation } from "../api/stripe";
 import { getClientUrl } from "../api/url";
 import Modal from "./Modal";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
+);
 
 interface StripeCheckoutProps {
   open: boolean;
@@ -23,7 +25,13 @@ interface StripeCheckoutProps {
   submitText: string;
 }
 
-const StripeForm = ({ open, onClose, returnUrl, title, submitText }: StripeCheckoutProps) => {
+const StripeForm = ({
+  open,
+  onClose,
+  returnUrl,
+  title,
+  submitText,
+}: StripeCheckoutProps) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -45,16 +53,28 @@ const StripeForm = ({ open, onClose, returnUrl, title, submitText }: StripeCheck
   };
 
   return (
-    <Modal open={open} onClose={onClose} title={title} modalFooter={" "} keepMounted={false}>
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={title}
+      modalFooter={" "}
+      keepMounted={false}
+    >
       <form onSubmit={handleSubmit}>
         <PaymentElement />
-        <Button type="submit" disabled={!stripe || !elements} variant='contained' fullWidth sx={{ mt: 4 }}>
+        <Button
+          type="submit"
+          disabled={!stripe || !elements}
+          variant="contained"
+          fullWidth
+          sx={{ mt: 4 }}
+        >
           {submitText}
         </Button>
       </form>
     </Modal>
-  )
-}
+  );
+};
 
 const StripeCheckout = ({
   open,
@@ -63,13 +83,16 @@ const StripeCheckout = ({
   amount,
   returnUrl,
   title,
-  submitText
+  submitText,
 }: StripeCheckoutProps) => {
-  const [postPaymentIntent, {
-    data: postPaymentIntentData,
-    isLoading: postPaymentIntentLoading,
-    isSuccess: postPaymentIntentSuccess
-  }] = usePostPaymentIntentMutation();
+  const [
+    postPaymentIntent,
+    {
+      data: postPaymentIntentData,
+      isLoading: postPaymentIntentLoading,
+      isSuccess: postPaymentIntentSuccess,
+    },
+  ] = usePostPaymentIntentMutation();
 
   const clientSecret = postPaymentIntentData?.client_secret;
 
@@ -77,16 +100,16 @@ const StripeCheckout = ({
     if (open) {
       postPaymentIntent({ amount, metadata });
     }
-  }, [amount, metadata, open, postPaymentIntent])
+  }, [amount, metadata, open, postPaymentIntent]);
 
   if (!clientSecret) return null;
 
   const options: StripeElementsOptions = {
     clientSecret,
     appearance: {
-      theme: 'night'
+      theme: "night",
     },
-  }
+  };
 
   return (
     <Elements stripe={stripePromise} options={options}>
@@ -99,7 +122,7 @@ const StripeCheckout = ({
         submitText={submitText}
       />
     </Elements>
-  )
-}
+  );
+};
 
 export default StripeCheckout;

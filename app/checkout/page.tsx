@@ -14,7 +14,7 @@ import { getClientUrl } from "../../api/url";
 import { useLazyGetProductQuery, useGetCartItemsQuery } from "../../api/space";
 import { formatCurrency } from "../../helpers";
 
-export default function Checkout() {
+const Checkout = () => {
   const [isStripeOpen, setIsStripeOpen] = useState(false);
   const [products, setProducts] = useState<any>([]);
 
@@ -166,4 +166,6 @@ export default function Checkout() {
       />
     </>
   );
-}
+};
+
+export default Checkout;

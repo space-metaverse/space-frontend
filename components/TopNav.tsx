@@ -1,8 +1,8 @@
-import { useState, MouseEvent, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from "next/image"
-import logoImage from "../public/logo.png"
-import Link from 'next/link';
+import { useState, MouseEvent, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import logoImage from "../public/logo.png";
+import Link from "next/link";
 import {
   Badge,
   Stack,
@@ -19,66 +19,66 @@ import {
   Toolbar,
   Box,
   AppBar,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useAppSelector } from '../redux/hooks';
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useAppSelector } from "../redux/hooks";
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
-  '& .MuiBadge-badge': {
+  "& .MuiBadge-badge": {
     right: -3,
     top: 13,
     border: `2px solid ${theme.palette.background.paper}`,
-    padding: '0 4px',
+    padding: "0 4px",
   },
 }));
 
-const pages = ['Spaces', 'Events', 'Products', 'About'];
+const pages = ["Spaces", "Events", "Products", "About"];
 
 const TopNav = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [username, setUsername] = useState<string>('');
+  const [username, setUsername] = useState<string>("");
 
-  const router = useRouter()
+  const router = useRouter();
   const cartItems = useAppSelector((state) => state.cart.items);
 
   const settings = [
-    ...(!username ? ['Login'] : []),
-    ...(username ? ['Profile'] : []),
-    ...(username ? ['Logout'] : [])
+    ...(!username ? ["Login"] : []),
+    ...(username ? ["Profile"] : []),
+    ...(username ? ["Logout"] : []),
   ];
 
   const handleNavigate = (page: string) => {
-    let path = '';
-    if (page === 'Spaces') {
-      path = '/spaces';
+    let path = "";
+    if (page === "Spaces") {
+      path = "/spaces";
     }
-    if (page === 'Events') {
-      path = '/events';
+    if (page === "Events") {
+      path = "/events";
     }
-    if (page === 'Products') {
-      path = '/products';
+    if (page === "Products") {
+      path = "/products";
     }
-    if (page === 'About') {
-      path = '/about';
+    if (page === "About") {
+      path = "/about";
     }
-    if (page === 'Profile') {
-      path = '/profile';
+    if (page === "Profile") {
+      path = "/profile";
     }
-    if (page === 'Login') {
-      path = '/login';
+    if (page === "Login") {
+      path = "/login";
     }
-    if (page === 'Logout') {
-      path = '/login';
-      window.localStorage.removeItem('username');
-      window.localStorage.removeItem('immerToken');
-      window.localStorage.removeItem('hubsToken');
+    if (page === "Logout") {
+      path = "/login";
+      window.localStorage.removeItem("username");
+      window.localStorage.removeItem("immerToken");
+      window.localStorage.removeItem("hubsToken");
     }
     router.push(path);
     handleCloseNavMenu();
     handleCloseUserMenu();
-  }
+  };
 
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -96,23 +96,27 @@ const TopNav = () => {
   };
 
   useEffect(() => {
-    const username = window.localStorage.getItem('username');
+    const username = window.localStorage.getItem("username");
     if (username) {
       setUsername(username);
     }
-  }, [])
+  }, []);
 
   return (
-    <AppBar position="static" sx={{ background: 'white', color: '#111114' }}>
+    <AppBar position="static" sx={{ background: "white", color: "#111114" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Link href="/" passHref style={{ marginRight: '1rem' }}>
+          <Link href="/" passHref style={{ marginRight: "1rem" }}>
             <Stack>
-              <Image src={logoImage} alt="space-store" style={{ width: '60px', height: '100%', objectFit: 'cover' }} />
+              <Image
+                src={logoImage}
+                alt="space-store"
+                style={{ width: "60px", height: "100%", objectFit: "cover" }}
+              />
             </Stack>
           </Link>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -127,18 +131,18 @@ const TopNav = () => {
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "bottom",
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: 'block', md: 'none' },
+                display: { xs: "block", md: "none" },
               }}
             >
               {pages.map((page) => (
@@ -155,23 +159,23 @@ const TopNav = () => {
             href=""
             sx={{
               mr: 2,
-              display: { xs: 'flex', md: 'none' },
+              display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: '#111114',
-              textDecoration: 'none',
+              letterSpacing: ".3rem",
+              color: "#111114",
+              textDecoration: "none",
             }}
           >
             SPACE
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={() => handleNavigate(page)}
-                sx={{ my: 2, display: 'block', color: '#111114' }}
+                sx={{ my: 2, display: "block", color: "#111114" }}
               >
                 {page}
               </Button>
@@ -180,8 +184,14 @@ const TopNav = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             <Stack direction="row" spacing={2}>
-              <IconButton aria-label="cart" onClick={() => router.push('/checkout')}>
-                <StyledBadge badgeContent={String(cartItems.length ?? 0)} color="secondary">
+              <IconButton
+                aria-label="cart"
+                onClick={() => router.push("/checkout")}
+              >
+                <StyledBadge
+                  badgeContent={String(cartItems.length ?? 0)}
+                  color="secondary"
+                >
                   <ShoppingCartIcon />
                 </StyledBadge>
               </IconButton>
@@ -192,17 +202,17 @@ const TopNav = () => {
               </Tooltip>
             </Stack>
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: "45px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
@@ -217,7 +227,7 @@ const TopNav = () => {
         </Toolbar>
       </Container>
     </AppBar>
-  )
-}
+  );
+};
 
 export default TopNav;

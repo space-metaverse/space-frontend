@@ -21,10 +21,11 @@ import { addCartItem } from "../../../redux/slices/cart";
 import { usePathname } from "next/navigation";
 import { useAddCartItemMutation, useGetProductQuery } from "../../../api/space";
 import { formatCurrency } from "@/helpers";
+import miley from "../../../public/miley.png";
 
 const sizes = ["Size 1", "Size 2", "Size 3"];
 
-export default function ProductPage() {
+const ProductPage = () => {
   const dispatch = useAppDispatch();
   const [size, setSize] = useState(sizes[0]);
   const [quantity, setQuantity] = useState(1);
@@ -48,6 +49,7 @@ export default function ProductPage() {
 
   const handleAddCartItem = async (productId: string) => {
     await postCartItem({
+      hub_sid: "SgPdAJP",
       item: {
         product: {
           product_variation_sid: productId,
@@ -83,7 +85,7 @@ export default function ProductPage() {
                 src={
                   data?.thumbnail_url.startsWith("http")
                     ? data?.thumbnail_url
-                    : null
+                    : miley
                 }
                 alt={"header"}
                 width={500}
@@ -153,4 +155,6 @@ export default function ProductPage() {
       )}
     </Box>
   );
-}
+};
+
+export default ProductPage;

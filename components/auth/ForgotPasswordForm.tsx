@@ -38,7 +38,7 @@ const ForgotPasswordForm: React.FC = () => {
   const router = useRouter()
   const query = useSearchParams()
 
-  const forgotPasswordModal = query.get('forgotPasswordModal')
+  const forgotPasswordModal = query?.get('forgotPasswordModal')
 
   useEffect(() => {
     modalRef.current?.opened()

@@ -17,6 +17,7 @@ import { formatCurrency } from "../helpers";
 
 interface ProductCardProps {
   productId: string;
+  hubId: string;
   title: string;
   owner: string;
   image: string;
@@ -25,6 +26,7 @@ interface ProductCardProps {
 
 const ProductCard = ({
   productId,
+  hubId,
   title,
   owner,
   image,
@@ -44,6 +46,7 @@ const ProductCard = ({
 
   const handleAddCartItem = async (productId: string) => {
     await postCartItem({
+      hub_sid: hubId,
       item: {
         product: {
           product_variation_sid: productId,

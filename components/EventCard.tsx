@@ -16,6 +16,7 @@ import { addCartItem } from "../redux/slices/cart";
 
 interface EventCardProps {
   id: string;
+  hubId: string;
   title: string;
   description: string;
   image: string;
@@ -25,6 +26,7 @@ interface EventCardProps {
 
 const EventCard = ({
   id,
+  hubId,
   title,
   description,
   image,
@@ -45,6 +47,7 @@ const EventCard = ({
 
   const handleAddCartItem = async (id: string) => {
     await postCartItem({
+      hub_sid: hubId,
       item: {
         ticket: {
           timeslot_sid: id,

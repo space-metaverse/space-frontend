@@ -237,6 +237,7 @@ export interface Room {
 }
 
 interface AddCartItemRequest {
+  hub_sid: string
   item: {
     product?: {
       product_variation_sid: string

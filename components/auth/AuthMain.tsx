@@ -51,7 +51,7 @@ const AuthMain: React.FC<Props> = ({ selectedTab }) => {
 
   const query = useSearchParams()
 
-  const redirect = query.get('redirect')
+  const redirect = query?.get('redirect')
 
   const handleTabChange = (tab: string) => {
     const path = tab.toLowerCase();
