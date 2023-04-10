@@ -37,7 +37,7 @@ const CheckoutItem = ({ id, title, type, price, image, quantity, refetchCart }: 
   }
 
   return (
-    <Box sx={{ p: 5, borderBottom: '1px black solid' }}>
+    <Box sx={{ p: 3, borderBottom: '1px black solid' }}>
       <Grid container>
         <Grid xs={12} md={4}>
           <Image
@@ -48,7 +48,7 @@ const CheckoutItem = ({ id, title, type, price, image, quantity, refetchCart }: 
             style={{ width: '12rem', height: '12rem', objectFit: 'cover' }}
           />
         </Grid>
-        <Grid xs={12} md={8}>
+        <Grid xs={12} md={7}>
           <Typography variant="body1" pb={2} fontWeight={500}>
             {type}
           </Typography>
@@ -62,7 +62,7 @@ const CheckoutItem = ({ id, title, type, price, image, quantity, refetchCart }: 
             Quantity: {quantity}
           </Typography>
         </Grid>
-        <Grid xs={12} md={8}>
+        <Grid xs={12} md={1}>
           <Delete onClick={handleDelete} />
         </Grid>
       </Grid>

@@ -136,7 +136,7 @@ const Checkout = () => {
 
       {!cartLoading && !cartError && activeStep === CheckoutStep.Cart && (
         <>
-          <Grid container spacing={3}>
+          <Grid container spacing={3} pt={3}>
             {[...products].map((item, i) => (
               <Grid xs={12} key={`${item.productId}-${i}`}>
                 <CheckoutItem
@@ -212,7 +212,7 @@ const Checkout = () => {
 
             <Grid xs={12}>
               <Typography variant="h5" fontWeight={500}>
-                Personal Information
+                Delivery Information
               </Typography>
             </Grid>
 
@@ -396,8 +396,6 @@ const Checkout = () => {
           </Button>
 
           <StripeCheckout
-            open={isStripeOpen}
-            onClose={() => setIsStripeOpen(false)}
             metadata={{
               account_id: "",
               products: [
@@ -410,7 +408,6 @@ const Checkout = () => {
             }}
             amount={500}
             returnUrl={`${getClientUrl()}/checkout`}
-            title={"SPACE Checkout"}
             submitText={"Checkout!"}
           />
         </>
