@@ -466,6 +466,14 @@ const Checkout = () => {
             onSuccess={handleStripeSuccess}
             onError={handleStripeError}
           />
+          <Stack flexDirection="row" justifyContent="space-between" mt={3}>
+            <Typography variant="h5" fontWeight={500}>
+              Total
+            </Typography>
+            <Typography variant="h5" fontWeight={500}>
+              {formattedAmount}
+            </Typography>
+          </Stack>
         </Box>
       )}
 
