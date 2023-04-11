@@ -5,7 +5,11 @@ import {
   useElements,
   Elements,
 } from "@stripe/react-stripe-js";
-import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
+import {
+  loadStripe,
+  PaymentIntent,
+  StripeElementsOptions,
+} from "@stripe/stripe-js";
 import { useEffect } from "react";
 import { usePostPaymentIntentMutation } from "../api/space";
 import { getClientUrl } from "../api/url";
@@ -19,9 +23,16 @@ interface StripeCheckoutProps {
   amount: number;
   returnUrl?: string;
   submitText: string;
+  onSuccess?: (paymentIntent: PaymentIntent) => void;
+  onError?: (error: any) => void;
 }
 
-const StripeForm = ({ returnUrl, submitText }: StripeCheckoutProps) => {
+const StripeForm = ({
+  returnUrl,
+  submitText,
+  onSuccess,
+  onError,
+}: StripeCheckoutProps) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -32,14 +43,25 @@ const StripeForm = ({ returnUrl, submitText }: StripeCheckoutProps) => {
 
     if (!elements || !stripe || !cardElement) return;
 
-    const { error } = await stripe.confirmPayment({
+    const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: returnUrl ? returnUrl : `${getClientUrl()}/checkout`,
+        return_url: returnUrl
+          ? returnUrl
+          : `${getClientUrl()}/checkout/success`,
       },
+      redirect: "if_required",
     });
 
-    console.log(error);
+    if (!error) {
+      onSuccess && onSuccess(paymentIntent);
+      return;
+    } else {
+      onError && onError(error);
+      console.log(error);
+    }
+
+    console.log(error, paymentIntent);
   };
 
   return (
@@ -63,6 +85,8 @@ const StripeCheckout = ({
   amount,
   returnUrl,
   submitText,
+  onSuccess,
+  onError,
 }: StripeCheckoutProps) => {
   const [
     postPaymentIntent,
@@ -91,6 +115,8 @@ const StripeCheckout = ({
         amount={amount}
         returnUrl={returnUrl}
         submitText={submitText}
+        onError={onError}
+        onSuccess={onSuccess}
       />
     </Elements>
   );

@@ -302,6 +302,39 @@ interface PostPaymentIntentResponse extends PaymentIntent {
   clientSecret: string
 }
 
+interface PostOrderRequest {
+  data: {
+    account_id: string
+    amount: number
+    shipping_cost: number
+    currency: string
+    status: string
+    live_mode: boolean
+    hub_sid: string
+    payment_id: string
+    products: Array<{
+      product_variation_sid: string
+      quantity: number
+    }>
+    tickets: any[]
+  },
+  customer: {
+    name: string
+    address_line_two: string
+    country: string
+    zipcode: string
+    city: string
+    state: string
+    address: string
+    email: string
+    telephone: string
+  }
+}
+
+interface PostOrderResponse {
+
+}
+
 export const spaceApi = createApi({
   reducerPath: 'spaceApi',
   baseQuery: fetchBaseQuery({ baseUrl: getBaseURL() }),
@@ -470,6 +503,13 @@ export const spaceApi = createApi({
         }
       })
     }),
+    postOrder: builder.mutation<PostOrderResponse, PostOrderRequest>({
+      query: (body) => ({
+        url: `/api/v1/orders`,
+        method: 'POST',
+        body,
+      })
+    }),
   })
 })
 
@@ -494,4 +534,5 @@ export const {
   useGetProductQuery,
   useDeleteCartItemMutation,
   usePostPaymentIntentMutation,
+  usePostOrderMutation,
 } = spaceApi

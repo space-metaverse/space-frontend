@@ -19,11 +19,16 @@ import CheckoutItem from "./CheckoutItem";
 import StripeCheckout from "../../components/StripeCheckout";
 import { useEffect, useMemo, useState } from "react";
 import { getClientUrl } from "../../api/url";
-import { useLazyGetProductQuery, useGetCartItemsQuery } from "../../api/space";
+import {
+  useLazyGetProductQuery,
+  useGetCartItemsQuery,
+  usePostOrderMutation,
+} from "../../api/space";
 import { formatCurrency } from "../../helpers";
 import { MuiTelInput } from "mui-tel-input";
 import Image from "next/image";
 import { allCountries } from "country-region-data";
+import { PaymentIntent } from "@stripe/stripe-js";
 
 enum CheckoutStep {
   Cart = 0,
@@ -32,7 +37,6 @@ enum CheckoutStep {
 }
 
 const Checkout = () => {
-  const [isStripeOpen, setIsStripeOpen] = useState(false);
   const [products, setProducts] = useState<any>([]);
   const [activeStep, setActiveStep] = useState<CheckoutStep>(CheckoutStep.Cart);
 
@@ -45,6 +49,7 @@ const Checkout = () => {
   const [address, setAddress] = useState("");
   const [suite, setSuite] = useState("");
   const [deliveryNotes, setDeliveryNotes] = useState("");
+  const [selectedHubId, setSelectedHubId] = useState("");
 
   const {
     data: cartData,
@@ -62,6 +67,15 @@ const Checkout = () => {
     },
   ] = useLazyGetProductQuery();
 
+  const [
+    postOrder,
+    {
+      isLoading: postOrderLoading,
+      isSuccess: postOrderSuccess,
+      isError: postOrderError,
+    },
+  ] = usePostOrderMutation();
+
   useEffect(() => {
     cartData?.data.forEach(async (entry: any) => {
       if (entry?.quantity > 0) {
@@ -73,6 +87,7 @@ const Checkout = () => {
             productId: entry?.item?.product?.product_variation_sid,
           });
           if (product?.isSuccess) {
+            setSelectedHubId(entry?.hub_sid);
             setProducts((oldProducts: any) => [
               ...oldProducts,
               {
@@ -91,13 +106,61 @@ const Checkout = () => {
     });
   }, [cartData?.data, getProduct]);
 
-  const totalPrice = useMemo(() => {
+  const formattedAmount = useMemo(() => {
     return formatCurrency(
-      products.reduce((acc: number, curr: any) => {
-        return acc + curr?.price * curr?.quantity;
-      }, 0)
+      products
+        .filter((p: any) => p.hubId === selectedHubId)
+        .reduce((acc: number, curr: any) => {
+          return acc + curr?.price * curr?.quantity;
+        }, 0)
     );
-  }, [products]);
+  }, [products, selectedHubId]);
+
+  const amount = useMemo(() => {
+    return products
+      .filter((p: any) => p.hubId === selectedHubId)
+      .reduce((acc: number, curr: any) => {
+        return acc + curr?.price * curr?.quantity;
+      }, 0);
+  }, [products, selectedHubId]);
+
+  const handleStripeSuccess = (paymentIntent: PaymentIntent) => {
+    console.log(paymentIntent, products);
+    postOrder({
+      data: {
+        account_id: window.localStorage.getItem("accountId") as string,
+        amount: amount * 100,
+        shipping_cost: 0,
+        currency: "usd",
+        status: "payment_processing",
+        live_mode: false,
+        hub_sid: selectedHubId,
+        payment_id: paymentIntent.id,
+        products: products
+          .filter((p: any) => p.hubId === selectedHubId)
+          .map((product: any) => ({
+            product_variation_sid: product.productId,
+            quantity: product.quantity,
+          })),
+        tickets: [],
+      },
+      customer: {
+        name: "cjft",
+        address_line_two: suite,
+        country,
+        zipcode: zipCode,
+        city,
+        state: region[0],
+        address,
+        email,
+        telephone: phone,
+      },
+    });
+  };
+
+  const handleStripeError = (error: any) => {
+    console.log(error);
+  };
 
   return (
     <Box
@@ -165,7 +228,7 @@ const Checkout = () => {
                 Total
               </Typography>
               <Typography variant="h5" fontWeight={500}>
-                {totalPrice}
+                {formattedAmount}
               </Typography>
             </Stack>
           </Stack>
@@ -397,9 +460,11 @@ const Checkout = () => {
         <Box mt={3}>
           <StripeCheckout
             metadata={{}}
-            amount={500}
+            amount={amount * 100}
             returnUrl={`${getClientUrl()}/checkout`}
             submitText={"Finish Payment"}
+            onSuccess={handleStripeSuccess}
+            onError={handleStripeError}
           />
         </Box>
       )}
