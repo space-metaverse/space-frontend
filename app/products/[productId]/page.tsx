@@ -51,9 +51,7 @@ const ProductPage = () => {
     await postCartItem({
       hub_sid: "SgPdAJP",
       item: {
-        product: {
-          product_variation_sid: productId,
-        },
+        product_variation_sid: productId,
       },
       quantity,
     });
