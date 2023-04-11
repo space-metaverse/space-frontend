@@ -28,6 +28,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <html lang="en">
+      <title>Space</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta
+        name="description"
+        content="Explore 3D e-commerce and meet your favorite creators."
+      />
       <ReduxProvider store={store}>
         <SpaceThemeProvider>
           <ThemeProvider theme={theme}>
