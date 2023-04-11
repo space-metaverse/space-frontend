@@ -22,6 +22,7 @@ interface ProductCardProps {
   owner: string;
   image: string;
   price: number;
+  quantity: number;
 }
 
 const ProductCard = ({
@@ -31,6 +32,7 @@ const ProductCard = ({
   owner,
   image,
   price,
+  quantity,
 }: ProductCardProps) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -99,8 +101,9 @@ const ProductCard = ({
             onClick={() => handleAddCartItem(productId)}
             fullWidth
             color="primary"
+            disabled={quantity === 0}
           >
-            Add to Cart
+            {quantity > 0 ? "Add to Cart" : "Out of Stock"}
           </Button>
         </CardActions>
       </Stack>

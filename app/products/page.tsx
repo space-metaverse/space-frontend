@@ -35,6 +35,7 @@ const ProductsPage = () => {
                     : null
                 }
                 price={product.product_variations?.[0]?.price}
+                quantity={product.product_variations?.[0]?.quantity}
               />
             </Grid>
           ))

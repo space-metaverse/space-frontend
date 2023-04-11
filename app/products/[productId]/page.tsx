@@ -101,11 +101,7 @@ const ProductPage = () => {
                 {formatCurrency(Number(data?.price))}
               </Typography>
               <Typography variant="body1" pt={3}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                euismod, nisl vitae ultricies lacinia, nisl nisl aliquet nisl,
-                eget aliquam nisl nisl eu nunc. Sed euismod, nisl vitae
-                ultricies lacinia, nisl nisl aliquet nisl, eget aliquam nisl
-                nisl eu nunc.
+                {data?.product?.description}
               </Typography>
               <Stack flexDirection="row" gap={3} mt={10}>
                 <FormControl fullWidth>
@@ -137,17 +133,20 @@ const ProductPage = () => {
                   size="large"
                   fullWidth
                   onClick={() => handleAddCartItem(productId)}
+                  disabled={postCartItemLoading || data?.quantity === 0}
                 >
-                  Add to cart
+                  {data?.quantity > 0 ? "Add to Cart" : "Out of Stock"}
                 </Button>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  size="large"
-                  fullWidth
-                >
-                  Buy now
-                </Button>
+                {data?.quantity > 0 && (
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="large"
+                    fullWidth
+                  >
+                    Buy now
+                  </Button>
+                )}
               </Stack>
             </Grid>
           </Grid>
