@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { getBaseURL } from './url'
+import { PaymentIntent } from '@stripe/stripe-js'
 
 interface GetMySpacesRequest {
 }
@@ -290,6 +291,17 @@ interface DeleteCartItemRequest {
   quantity: number
 }
 
+interface PostPaymentIntentRequest {
+  amount: number
+  metadata: {
+    type: string
+  }
+}
+
+interface PostPaymentIntentResponse extends PaymentIntent {
+  clientSecret: string
+}
+
 export const spaceApi = createApi({
   reducerPath: 'spaceApi',
   baseQuery: fetchBaseQuery({ baseUrl: getBaseURL() }),
@@ -445,6 +457,19 @@ export const spaceApi = createApi({
         method: 'GET',
       })
     }),
+    postPaymentIntent: builder.mutation<PostPaymentIntentResponse, PostPaymentIntentRequest>({
+      query: (body) => ({
+        url: `/api/v1/immers_create_payment_intent`,
+        method: 'POST',
+        body: {
+          ...body,
+          metadata: {
+            ...body.metadata,
+            account_id: window.localStorage.getItem('accountId') as string,
+          }
+        }
+      })
+    }),
   })
 })
 
@@ -468,4 +493,5 @@ export const {
   useLazyGetProductQuery,
   useGetProductQuery,
   useDeleteCartItemMutation,
+  usePostPaymentIntentMutation,
 } = spaceApi

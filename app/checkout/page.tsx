@@ -34,9 +34,7 @@ enum CheckoutStep {
 const Checkout = () => {
   const [isStripeOpen, setIsStripeOpen] = useState(false);
   const [products, setProducts] = useState<any>([]);
-  const [activeStep, setActiveStep] = useState<CheckoutStep>(
-    CheckoutStep.Cart
-  );
+  const [activeStep, setActiveStep] = useState<CheckoutStep>(CheckoutStep.Cart);
 
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("+1");
@@ -280,7 +278,18 @@ const Checkout = () => {
                 )}
                 openOnFocus
                 renderOption={(props, option) => (
-                  <Box key={option[0]} component="li">
+                  <Box
+                    key={option[0]}
+                    {...props}
+                    sx={{
+                      "& > img": {
+                        mr: 2,
+                        flexShrink: 0,
+                        borderRadius: ".25rem",
+                      },
+                    }}
+                    component="li"
+                  >
                     {option[0]}
                   </Box>
                 )}
@@ -385,34 +394,14 @@ const Checkout = () => {
       )}
 
       {!cartLoading && !cartError && activeStep === CheckoutStep.Payment && (
-        <>
-          <Grid container spacing={3}></Grid>
-
-          <Button
-            onClick={() => setIsStripeOpen(true)}
-            fullWidth
-            variant="contained"
-            sx={{ mt: 2 }}
-          >
-            Complete Checkout
-          </Button>
-
+        <Box mt={3}>
           <StripeCheckout
-            metadata={{
-              account_id: "",
-              products: [
-                {
-                  product_variation_sid: "gXLnmjQ",
-                  quantity: 1,
-                },
-              ],
-              tickets: ["timeSlot1Id", "timeSlot2Id", "timeSlot3Id"],
-            }}
+            metadata={{}}
             amount={500}
             returnUrl={`${getClientUrl()}/checkout`}
-            submitText={"Checkout!"}
+            submitText={"Finish Payment"}
           />
-        </>
+        </Box>
       )}
 
       {cartLoading && (
