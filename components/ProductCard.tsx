@@ -50,9 +50,7 @@ const ProductCard = ({
     await postCartItem({
       hub_sid: hubId,
       item: {
-        product: {
-          product_variation_sid: productId,
-        },
+        product_variation_sid: productId,
       },
       quantity: 1,
     });

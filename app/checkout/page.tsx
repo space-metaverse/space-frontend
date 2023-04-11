@@ -79,19 +79,16 @@ const Checkout = () => {
   useEffect(() => {
     cartData?.data.forEach(async (entry: any) => {
       if (entry?.quantity > 0) {
-        if (
-          entry?.item?.product &&
-          entry?.item?.product?.product_variation_sid
-        ) {
+        if (entry?.item && entry?.item?.product_variation_sid) {
           const product = await getProduct({
-            productId: entry?.item?.product?.product_variation_sid,
+            productId: entry?.item?.product_variation_sid,
           });
           if (product?.isSuccess) {
             setSelectedHubId(entry?.hub_sid);
             setProducts((oldProducts: any) => [
               ...oldProducts,
               {
-                productId: entry?.item?.product?.product_variation_sid,
+                productId: entry?.item?.product_variation_sid,
                 hubId: entry?.hub_sid,
                 title: product?.data?.name,
                 type: "product",
@@ -202,7 +199,7 @@ const Checkout = () => {
             {[...products].map((item, i) => (
               <Grid xs={12} key={`${item.productId}-${i}`}>
                 <CheckoutItem
-                  id={`${item.productId}-${i}`}
+                  id={item.productId}
                   hubId={item.hubId}
                   title={item.title}
                   type={item.type}

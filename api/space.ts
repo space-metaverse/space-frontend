@@ -240,12 +240,8 @@ export interface Room {
 interface AddCartItemRequest {
   hub_sid: string
   item: {
-    product?: {
-      product_variation_sid: string
-    },
-    ticket?: {
-      timeslot_sid: string
-    }
+    product_variation_sid?: string
+    timeslot_sid?: string
   },
   quantity: number
 }
@@ -253,12 +249,8 @@ interface AddCartItemRequest {
 interface AddCartItemResponse {
   account_id: string
   item: {
-    product?: {
-      product_variation_sid: string
-    },
-    ticket?: {
-      timeslot_sid: string
-    }
+    product_variation_sid?: string
+    timeslot_sid?: string
   },
   quantity: number
 }
@@ -267,12 +259,8 @@ interface GetCartResponse {
   data: Array<{
     id: number
     item: {
-      product?: {
-        product_variation_sid: string
-      },
-      ticket?: {
-        timeslot_sid: string
-      }
+      product_variation_sid?: string
+      timeslot_sid?: string
     },
     quantity: number
   }>
@@ -281,12 +269,8 @@ interface GetCartResponse {
 interface DeleteCartItemRequest {
   hub_sid: string
   item: {
-    product?: {
-      product_variation_sid: string
-    },
-    ticket?: {
-      timeslot_sid: string
-    }
+    product_variation_sid?: string
+    timeslot_sid?: string
   },
   quantity: number
 }

@@ -49,9 +49,7 @@ const EventCard = ({
     await postCartItem({
       hub_sid: hubId,
       item: {
-        ticket: {
-          timeslot_sid: id,
-        },
+        timeslot_sid: id,
       },
       quantity: 1,
     });
