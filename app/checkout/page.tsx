@@ -23,6 +23,7 @@ import {
   useLazyGetProductQuery,
   useGetCartItemsQuery,
   usePostOrderMutation,
+  useLazyGetTicketQuery,
 } from "../../api/space";
 import { formatCurrency } from "../../helpers";
 import { MuiTelInput } from "mui-tel-input";
@@ -38,6 +39,7 @@ enum CheckoutStep {
 
 const Checkout = () => {
   const [products, setProducts] = useState<any>([]);
+  const [tickets, setTickets] = useState<any>([]);
   const [activeStep, setActiveStep] = useState<CheckoutStep>(CheckoutStep.Cart);
 
   const [email, setEmail] = useState("");
@@ -68,6 +70,11 @@ const Checkout = () => {
   ] = useLazyGetProductQuery();
 
   const [
+    getTicket,
+    { data: ticketData, isLoading: ticketLoading, isFetching: ticketFetching },
+  ] = useLazyGetTicketQuery();
+
+  const [
     postOrder,
     {
       isLoading: postOrderLoading,
@@ -79,29 +86,49 @@ const Checkout = () => {
   useEffect(() => {
     cartData?.data.forEach(async (entry: any) => {
       if (entry?.quantity > 0) {
-        if (entry?.item && entry?.item?.product_variation_sid) {
-          const product = await getProduct({
-            productId: entry?.item?.product_variation_sid,
-          });
-          if (product?.isSuccess) {
-            setSelectedHubId(entry?.hub_sid);
-            setProducts((oldProducts: any) => [
-              ...oldProducts,
-              {
-                productId: entry?.item?.product_variation_sid,
-                hubId: entry?.hub_sid,
-                title: product?.data?.name,
-                type: "product",
-                price: product?.data?.price,
-                quantity: entry?.quantity,
-                image: product?.data?.thumbnail_url,
-              },
-            ]);
+        if (entry?.item) {
+          if (entry?.item?.product_variation_sid) {
+            const product = await getProduct({
+              productId: entry?.item?.product_variation_sid,
+            });
+            if (product?.isSuccess) {
+              setSelectedHubId(entry?.hub_sid);
+              setProducts((oldProducts: any) => [
+                ...oldProducts,
+                {
+                  productId: entry?.item?.product_variation_sid,
+                  hubId: entry?.hub_sid,
+                  title: product?.data?.name,
+                  type: "product",
+                  price: product?.data?.price,
+                  quantity: entry?.quantity,
+                  image: product?.data?.thumbnail_url,
+                },
+              ]);
+            }
+          } else if (entry?.item?.timeslot_sid) {
+            const ticket = await getTicket({
+              timeslotId: entry?.item?.timeslot_sid,
+            });
+            if (ticket?.isSuccess) {
+              setTickets((oldTickets: any) => [
+                ...oldTickets,
+                {
+                  productId: entry?.item?.timeslot_sid,
+                  hubId: entry?.hub_sid,
+                  title: ticket?.data?.name,
+                  type: "ticket",
+                  price: ticket?.data?.price,
+                  quantity: entry?.quantity,
+                  image: ticket?.data?.thumbnail_url,
+                },
+              ]);
+            }
           }
         }
       }
     });
-  }, [cartData?.data, getProduct]);
+  }, [cartData?.data, getProduct, getTicket]);
 
   const formattedAmount = useMemo(() => {
     return formatCurrency(
@@ -196,7 +223,7 @@ const Checkout = () => {
       {!cartLoading && !cartError && activeStep === CheckoutStep.Cart && (
         <>
           <Grid container spacing={3} pt={3}>
-            {[...products].map((item, i) => (
+            {[...products, ...tickets].map((item, i) => (
               <Grid xs={12} key={`${item.productId}-${i}`}>
                 <CheckoutItem
                   id={item.productId}

@@ -474,6 +474,12 @@ export const spaceApi = createApi({
         method: 'GET',
       })
     }),
+    getTicket: builder.query<any, { timeslotId: string }>({
+      query: ({ timeslotId }) => ({
+        url: `api/v1/timeslot?timeslot_sid=${timeslotId}`,
+        method: 'GET',
+      })
+    }),
     postPaymentIntent: builder.mutation<PostPaymentIntentResponse, PostPaymentIntentRequest>({
       query: (body) => ({
         url: `/api/v1/immers_create_payment_intent`,
@@ -519,4 +525,6 @@ export const {
   useDeleteCartItemMutation,
   usePostPaymentIntentMutation,
   usePostOrderMutation,
+  useGetTicketQuery,
+  useLazyGetTicketQuery,
 } = spaceApi
