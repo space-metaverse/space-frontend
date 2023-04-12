@@ -1,96 +1,22 @@
 "use client";
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import Image, { StaticImageData } from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useGetSpaceQuery } from "../../../api/space";
 import headerImage from "../../../public/space-header.png";
 import nikeImage from "../../../public/nike.png";
-import product1 from "../../../public/nike-1.png";
-import product2 from "../../../public/nike-2.png";
-import product3 from "../../../public/nike-3.png";
-import { formatCurrency } from "../../../helpers";
-
-const productsMock = [
-  {
-    id: "1",
-    title: "Fly Boys v3",
-    type: "Phygital",
-    image: product1,
-    price: 100,
-  },
-  {
-    id: "2",
-    title: "Sport Kicks",
-    type: "Phygital",
-    image: product2,
-    price: 200,
-  },
-  {
-    id: "3",
-    title: "Jordans",
-    type: "Phygital",
-    image: product3,
-    price: 300,
-  },
-];
-
-interface ProductCardProps {
-  id: string;
-  type: string;
-  title: string;
-  image: StaticImageData;
-  price: number;
-}
-
-const ProductCard = ({ id, type, title, image, price }: ProductCardProps) => {
-  const router = useRouter();
-  return (
-    <Card>
-      <CardMedia sx={{ height: 140 }} title={title}>
-        <Image
-          src={image}
-          alt={title}
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        />
-      </CardMedia>
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          {type}
-        </Typography>
-        <Typography gutterBottom variant="h5" component="div">
-          {title}
-        </Typography>
-        <Typography gutterBottom variant="body1">
-          {formatCurrency(price)}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" onClick={() => router.push(`/products/${id}`)}>
-          Buy Product
-        </Button>
-      </CardActions>
-    </Card>
-  );
-};
+import ProductCard from "../../../components/ProductCard";
 
 const Spaces = () => {
   const pathname = usePathname();
   const hubId = pathname?.split("/")[2];
 
-  const { data, error, isLoading } = useGetSpaceQuery(
-    { hubId: String(hubId) },
-    { skip: !hubId }
-  );
+  const {
+    data: spaceData,
+    error: spaceError,
+    isLoading: spaceLoading,
+  } = useGetSpaceQuery({ hubId: String(hubId) }, { skip: !hubId });
 
   return (
     <Box pb={4}>
@@ -147,7 +73,7 @@ const Spaces = () => {
                 sx={{ fontWeight: "bold" }}
                 mt={6}
               >
-                {data?.name}
+                {spaceData?.name}
               </Typography>
               <a href={`https://metaverse-demo.com/${hubId}`} target="_blank">
                 <Button variant="contained">Enter Space</Button>
@@ -155,7 +81,7 @@ const Spaces = () => {
             </Stack>
             <Typography variant="subtitle1">Official Store</Typography>
             <Typography variant="body1" mt={3}>
-              {data?.description || "No description"}
+              {spaceData?.description || "No description"}
             </Typography>
           </Box>
           <Box
@@ -169,11 +95,21 @@ const Spaces = () => {
           >
             <Typography variant="h5">Featured Products</Typography>
             <Grid container spacing={3} sx={{ mt: 1 }}>
-              {productsMock.map((product) => (
-                <Grid xs={12} md={4} key={product.title}>
-                  <ProductCard {...product} />
-                </Grid>
-              ))}
+              {spaceData?.products?.map((product) =>
+                product?.product_variation?.map((variation: any) => (
+                  <Grid xs={12} md={6} key={variation.title}>
+                    <ProductCard
+                      hubId={product.hub_id}
+                      quantity={variation.quantity}
+                      productId={variation.product_variation_sid}
+                      title={product.name}
+                      owner={product.created_by}
+                      image={variation.thumbnail_url}
+                      price={variation.price}
+                    />
+                  </Grid>
+                ))
+              )}
             </Grid>
           </Box>
         </Grid>
