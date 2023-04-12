@@ -22,7 +22,6 @@ const Home = () => {
       <Events />
       <Spaces />
       <EmailSubscribe />
-      <Launches />
     </Box>
   );
 };
