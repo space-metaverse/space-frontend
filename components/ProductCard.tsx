@@ -75,22 +75,26 @@ const ProductCard = ({
           />
         </CardMedia>
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography variant="body2" color="text.secondary">
+            Product
+          </Typography>
+          <Typography gutterBottom variant="h6" component="div">
             {title}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body1" color="text.secondary">
             {owner}
           </Typography>
-          <Typography variant="subtitle1">
+          <Typography variant="body1">
             {formatCurrency(Number(price) ?? 0)}
           </Typography>
         </CardContent>
-        <CardActions>
+        <CardActions sx={{ p: 2 }}>
           <Button
             size="small"
             onClick={() => router.push(`/products/${productId}`)}
             fullWidth
             color="secondary"
+            variant="outlined"
           >
             Visit Product
           </Button>
@@ -100,6 +104,7 @@ const ProductCard = ({
             fullWidth
             color="primary"
             disabled={quantity === 0}
+            variant="contained"
           >
             {quantity > 0 ? "Add to Cart" : "Out of Stock"}
           </Button>

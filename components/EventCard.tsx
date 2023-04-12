@@ -63,11 +63,11 @@ const EventCard = ({
       <Stack height="100%" justifyContent="space-between">
         <CardMedia sx={{ height: 140 }} image={image} title={title} />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {title}
-          </Typography>
           <Typography variant="body2" color="text.secondary">
-            {description}
+            Event
+          </Typography>
+          <Typography gutterBottom variant="h6" component="div">
+            {title}
           </Typography>
           <Countdown
             date={new Date(startDate * 1000).getTime()}
@@ -82,12 +82,13 @@ const EventCard = ({
             )}
           />
         </CardContent>
-        <CardActions>
+        <CardActions sx={{ p: 2 }}>
           <Button
             size="small"
             onClick={() => router.push(`/events/${id}`)}
             fullWidth
             color="secondary"
+            variant="outlined"
           >
             Learn More
           </Button>
@@ -96,6 +97,7 @@ const EventCard = ({
             onClick={() => handleAddCartItem(id)}
             fullWidth
             color="primary"
+            variant="contained"
           >
             Add to Cart
           </Button>
