@@ -28,6 +28,7 @@ const Events = () => {
                 image={event.image_url}
                 startDate={event.start_date}
                 endDate={event.end_date}
+                timeslots={event.timeslots}
               />
             </Grid>
           ))

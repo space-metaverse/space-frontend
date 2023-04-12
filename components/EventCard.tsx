@@ -22,6 +22,7 @@ interface EventCardProps {
   image: string;
   startDate: number;
   endDate: number;
+  timeslots: any[];
 }
 
 const EventCard = ({
@@ -32,6 +33,7 @@ const EventCard = ({
   image,
   startDate,
   endDate,
+  timeslots,
 }: EventCardProps) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -94,7 +96,7 @@ const EventCard = ({
           </Button>
           <Button
             size="small"
-            onClick={() => handleAddCartItem(id)}
+            onClick={() => handleAddCartItem(timeslots?.[0]?.timeslot_sid)}
             fullWidth
             color="primary"
             variant="contained"

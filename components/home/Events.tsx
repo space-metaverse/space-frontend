@@ -22,6 +22,7 @@ const Events = () => {
                 <Grid xs={12} md={4} key={event.event_sid}>
                   <EventCard
                     id={event.event_sid}
+                    timeslots={event.timeslots}
                     hubId={event.hub_sid}
                     title={event.title}
                     description={event.description}

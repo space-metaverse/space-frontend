@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Stack } from "@mui/system";
 import { useAppDispatch } from "../../../redux/hooks";
 import { addCartItem } from "../../../redux/slices/cart";
-import { useGetEventQuery } from "@/api/space";
+import { useAddCartItemMutation, useGetEventQuery } from "@/api/space";
 import { usePathname } from "next/navigation";
 import { Skeleton } from "@space-metaverse-ag/space-ui";
 import Countdown from "react-countdown";
@@ -23,6 +23,28 @@ const EventPage = () => {
   const [size, setSize] = useState(sizes[0]);
 
   const { data, error, isLoading } = useGetEventQuery({ event_sid: eventId });
+
+  const [
+    postCartItem,
+    {
+      isLoading: postCartItemLoading,
+      isSuccess: postCartItemSuccess,
+      isError: postCartItemError,
+    },
+  ] = useAddCartItemMutation();
+
+  const handleAddCartItem = async (id: string) => {
+    await postCartItem({
+      hub_sid: String(data?.hub_sid),
+      item: {
+        timeslot_sid: id,
+      },
+      quantity: 1,
+    });
+    dispatch(
+      addCartItem({ item: { ticket: { timeslot_sid: id } }, quantity: 1 })
+    );
+  };
 
   return (
     <Box>
@@ -85,15 +107,7 @@ const EventPage = () => {
               size="large"
               fullWidth
               onClick={() =>
-                dispatch(
-                  addCartItem({
-                    id: "1",
-                    title: "Nike Air Max 270 React",
-                    price: 123.23,
-                    quantity: 1,
-                    size,
-                  })
-                )
+                handleAddCartItem(String(data?.timeslots?.[0]?.timeslot_sid))
               }
             >
               Add ticket to cart

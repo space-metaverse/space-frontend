@@ -204,6 +204,13 @@ export interface Event {
   image_url: string
   start_date: number
   title: string
+  timeslots: Array<{
+    end_date: string
+    price: string
+    quantity: string
+    start_date: string
+    timeslot_sid: string
+  }>
 }
 
 interface GetEventResponse {
@@ -235,6 +242,7 @@ export interface Room {
   screenshot_url: string
   updated_at: string
   url: string
+  created_by_username: string
 }
 
 interface AddCartItemRequest {

@@ -96,7 +96,7 @@ const Checkout = () => {
               setProducts((oldProducts: any) => [
                 ...oldProducts,
                 {
-                  productId: entry?.item?.product_variation_sid,
+                  id: entry?.item?.product_variation_sid,
                   hubId: entry?.hub_sid,
                   title: product?.data?.name,
                   type: "product",
@@ -114,13 +114,13 @@ const Checkout = () => {
               setTickets((oldTickets: any) => [
                 ...oldTickets,
                 {
-                  productId: entry?.item?.timeslot_sid,
+                  id: entry?.item?.timeslot_sid,
                   hubId: entry?.hub_sid,
-                  title: ticket?.data?.name,
+                  title: ticket?.data?.event?.title,
                   type: "ticket",
                   price: ticket?.data?.price,
                   quantity: entry?.quantity,
-                  image: ticket?.data?.thumbnail_url,
+                  image: ticket?.data?.event?.image_url,
                 },
               ]);
             }
@@ -132,21 +132,21 @@ const Checkout = () => {
 
   const formattedAmount = useMemo(() => {
     return formatCurrency(
-      products
+      [...products, ...tickets]
         .filter((p: any) => p.hubId === selectedHubId)
         .reduce((acc: number, curr: any) => {
           return acc + curr?.price * curr?.quantity;
         }, 0)
     );
-  }, [products, selectedHubId]);
+  }, [products, selectedHubId, tickets]);
 
   const amount = useMemo(() => {
-    return products
+    return [...products, ...tickets]
       .filter((p: any) => p.hubId === selectedHubId)
       .reduce((acc: number, curr: any) => {
         return acc + curr?.price * curr?.quantity;
       }, 0);
-  }, [products, selectedHubId]);
+  }, [products, selectedHubId, tickets]);
 
   const handleStripeSuccess = (paymentIntent: PaymentIntent) => {
     console.log(paymentIntent, products);
@@ -163,10 +163,15 @@ const Checkout = () => {
         products: products
           .filter((p: any) => p.hubId === selectedHubId)
           .map((product: any) => ({
-            product_variation_sid: product.productId,
+            product_variation_sid: product.id,
             quantity: product.quantity,
           })),
-        tickets: [],
+        tickets: tickets
+          .filter((t: any) => t.hubId === selectedHubId)
+          .map((ticket: any) => ({
+            timeslot_sid: ticket.id,
+            quantity: ticket.quantity,
+          })),
       },
       customer: {
         name: "cjft",
@@ -224,9 +229,9 @@ const Checkout = () => {
         <>
           <Grid container spacing={3} pt={3}>
             {[...products, ...tickets].map((item, i) => (
-              <Grid xs={12} key={`${item.productId}-${i}`}>
+              <Grid xs={12} key={`${item.id}-${i}`}>
                 <CheckoutItem
-                  id={item.productId}
+                  id={item.id}
                   hubId={item.hubId}
                   title={item.title}
                   type={item.type}

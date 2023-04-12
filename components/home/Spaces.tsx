@@ -27,7 +27,7 @@ const Spaces = () => {
                 key={space.hub_id}
                 hubId={space.hub_id}
                 title={space.name}
-                owner={String(space.created_by)}
+                owner={String(space.created_by_username)}
                 image={space.screenshot_url}
                 description={space.description}
               />
