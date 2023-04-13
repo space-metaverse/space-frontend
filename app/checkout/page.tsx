@@ -111,6 +111,7 @@ const Checkout = () => {
               timeslotId: entry?.item?.timeslot_sid,
             });
             if (ticket?.isSuccess) {
+              setSelectedHubId(entry?.hub_sid);
               setTickets((oldTickets: any) => [
                 ...oldTickets,
                 {
@@ -139,6 +140,8 @@ const Checkout = () => {
         }, 0)
     );
   }, [products, selectedHubId, tickets]);
+
+  console.log(products, tickets)
 
   const amount = useMemo(() => {
     return [...products, ...tickets]

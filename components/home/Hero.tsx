@@ -78,11 +78,24 @@ const Hero = () => {
               justifyContent="center"
             >
               <Typography variant="h4" align="center" p={3}>
-                <Image
-                  src={spaceHelmet}
-                  alt="space-store"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
+              <video
+              autoPlay
+              loop
+              muted
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "0 0 20px 20px",
+              }}
+            >
+              <source
+                src={
+                  "https://public-space-assets.s3.us-west-2.amazonaws.com/space-helmet.mp4"
+                }
+                type="video/mp4"
+              />
+            </video>
               </Typography>
             </Box>
           </Grid>
