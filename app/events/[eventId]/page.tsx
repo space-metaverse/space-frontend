@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Stack } from "@mui/system";
 import { useAppDispatch } from "../../../redux/hooks";
 import { addCartItem } from "../../../redux/slices/cart";
-import { useAddCartItemMutation, useGetEventQuery } from "@/api/space";
+import { useAddCartItemMutation, useGetEventQuery } from "../../../api/space";
 import { usePathname } from "next/navigation";
 import { Skeleton } from "@space-metaverse-ag/space-ui";
 import Countdown from "react-countdown";

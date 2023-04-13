@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useAddCartItemMutation } from "@/api/space";
+import { useAddCartItemMutation } from "../api/space";
 import { useAppDispatch } from "../redux/hooks";
 import { addCartItem } from "../redux/slices/cart";
 import spaceImage from "../public/space-store.png";

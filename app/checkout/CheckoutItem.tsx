@@ -1,4 +1,4 @@
-import { useDeleteCartItemMutation } from "@/api/space";
+import { useDeleteCartItemMutation } from "../../api/space";
 import { Delete } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";

@@ -20,7 +20,7 @@ import { useAppDispatch } from "../../../redux/hooks";
 import { addCartItem } from "../../../redux/slices/cart";
 import { usePathname } from "next/navigation";
 import { useAddCartItemMutation, useGetProductQuery } from "../../../api/space";
-import { formatCurrency } from "@/helpers";
+import { formatCurrency } from "../../../helpers";
 import miley from "../../../public/miley.png";
 
 const sizes = ["Size 1", "Size 2", "Size 3"];

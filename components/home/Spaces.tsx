@@ -1,6 +1,6 @@
-import { Typography, Button, Box, Tabs } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { useGetAllRoomsQuery } from "@/api/space";
+import { useGetAllRoomsQuery } from "../../api/space";
 import SpaceCard from "../SpaceCard";
 
 const Spaces = () => {
@@ -13,7 +13,11 @@ const Spaces = () => {
         align="center"
         p={3}
         fontWeight={500}
-        sx={{ border: "3px solid #111114", backgroundColor: 'black', color: 'white' }}
+        sx={{
+          border: "3px solid #111114",
+          backgroundColor: "black",
+          color: "white",
+        }}
       >
         Featured Spaces
       </Typography>

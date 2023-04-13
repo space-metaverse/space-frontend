@@ -25,7 +25,6 @@ const Events = () => {
                     timeslots={event.timeslots}
                     hubId={event.hub_sid}
                     title={event.title}
-                    description={event.description}
                     image={event.image_url}
                     startDate={event.start_date}
                     endDate={event.end_date}
