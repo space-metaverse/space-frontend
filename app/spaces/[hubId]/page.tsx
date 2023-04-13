@@ -34,7 +34,7 @@ const Spaces = () => {
         width={2000}
         height={300}
         alt={"header"}
-        style={{ objectFit: "cover" }}
+        style={{ objectFit: "cover", width: "100%" }}
       />
       <Grid
         container
