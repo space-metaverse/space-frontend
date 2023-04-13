@@ -10,6 +10,7 @@ import ProductCard from "../../../components/ProductCard";
 import EventCard from "../../../components/EventCard";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlined";
+import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
 
 const Spaces = () => {
   const pathname = usePathname();
@@ -80,11 +81,22 @@ const Spaces = () => {
               alignItems="center"
               justifyContent={"space-between"}
             >
-              <Typography variant="h3" sx={{ fontWeight: "bold" }} mt={6}>
+              <Typography
+                variant="h3"
+                sx={{ fontWeight: "bold" }}
+                mt={6}
+                mb={2}
+              >
                 {spaceData?.name}
               </Typography>
               <a href={`https://metaverse-demo.com/${hubId}`} target="_blank">
-                <Button variant="contained">Enter Space</Button>
+                <Button
+                  variant="contained"
+                  endIcon={<RocketLaunchOutlinedIcon />}
+                  size="large"
+                >
+                  Enter Space
+                </Button>
               </a>
             </Stack>
             <Typography variant="subtitle1">Official Store</Typography>
