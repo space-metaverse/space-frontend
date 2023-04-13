@@ -47,6 +47,7 @@ interface GetSpaceResponse {
   products: any[]
   updated_at: string
   url: string
+  screenshot_url: string
 }
 
 interface GetShippingZoneRequest {

@@ -21,9 +21,11 @@ const Spaces = () => {
   return (
     <Box pb={4}>
       <Image
-        src={headerImage}
+        src={spaceData?.screenshot_url || headerImage}
+        width={2000}
+        height={300}
         alt={"header"}
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        style={{ objectFit: "cover" }}
       />
       <Grid
         container
@@ -49,7 +51,9 @@ const Spaces = () => {
             }}
           >
             <Image
-              src={nikeImage}
+              src={spaceData?.screenshot_url || nikeImage}
+              width={150}
+              height={150}
               alt={"header"}
               style={{
                 width: "8rem",
