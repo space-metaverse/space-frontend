@@ -18,7 +18,6 @@ interface EventCardProps {
   id: string;
   hubId: string;
   title: string;
-  description: string;
   image: string;
   startDate: number;
   endDate: number;
@@ -29,7 +28,6 @@ const EventCard = ({
   id,
   hubId,
   title,
-  description,
   image,
   startDate,
   endDate,

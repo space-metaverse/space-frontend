@@ -1,12 +1,15 @@
 "use client";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useGetSpaceQuery } from "../../../api/space";
+import { useGetEventsBySpaceQuery, useGetSpaceQuery } from "../../../api/space";
 import headerImage from "../../../public/space-header.png";
 import nikeImage from "../../../public/nike.png";
 import ProductCard from "../../../components/ProductCard";
+import EventCard from "../../../components/EventCard";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlined";
 
 const Spaces = () => {
   const pathname = usePathname();
@@ -17,6 +20,12 @@ const Spaces = () => {
     error: spaceError,
     isLoading: spaceLoading,
   } = useGetSpaceQuery({ hubId: String(hubId) }, { skip: !hubId });
+
+  const {
+    data: eventsData,
+    error: eventsError,
+    isLoading: eventsLoading,
+  } = useGetEventsBySpaceQuery({ hubId: String(hubId) }, { skip: !hubId });
 
   return (
     <Box pb={4}>
@@ -41,7 +50,7 @@ const Spaces = () => {
           mt: 2,
         })}
       >
-        <Grid xs={12} md={8}>
+        <Grid xs={12} lg={8}>
           <Box
             sx={{
               border: "1px solid #e9e9e9",
@@ -71,12 +80,7 @@ const Spaces = () => {
               alignItems="center"
               justifyContent={"space-between"}
             >
-              <Typography
-                variant="h4"
-                component="h1"
-                sx={{ fontWeight: "bold" }}
-                mt={6}
-              >
+              <Typography variant="h3" sx={{ fontWeight: "bold" }} mt={6}>
                 {spaceData?.name}
               </Typography>
               <a href={`https://metaverse-demo.com/${hubId}`} target="_blank">
@@ -97,7 +101,15 @@ const Spaces = () => {
               mt: 3,
             }}
           >
-            <Typography variant="h5">Featured Products</Typography>
+            <Stack
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography variant="h4">Featured Products</Typography>
+              <ShoppingBasketOutlinedIcon />
+            </Stack>
+            <Divider sx={{ pt: 2 }} />
             <Grid container spacing={3} sx={{ mt: 1 }}>
               {spaceData?.products?.map((product) =>
                 product?.product_variation?.map((variation: any) => (
@@ -117,7 +129,7 @@ const Spaces = () => {
             </Grid>
           </Box>
         </Grid>
-        <Grid xs={12} md={4}>
+        <Grid xs={12} lg={4}>
           <Box
             sx={{
               border: "1px solid #e9e9e9",
@@ -126,7 +138,28 @@ const Spaces = () => {
               position: "relative",
             }}
           >
-            <Typography variant="h5">Categories</Typography>
+            <Stack
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography variant="h4">Events</Typography>
+              <CalendarMonthOutlinedIcon />
+            </Stack>
+            <Divider sx={{ pt: 2 }} />
+            {eventsData?.data?.map((event: any, index: number) => (
+              <Box pt={2} key={`${event.name}-${index}}`}>
+                <EventCard
+                  id={event.timeslots?.[0]?.timeslot_sid}
+                  hubId={event.hub_id}
+                  startDate={event.start_date}
+                  endDate={event.end_date}
+                  title={event.name}
+                  image={event.image_url}
+                  timeslots={event.timeslots}
+                />
+              </Box>
+            ))}
           </Box>
           <Box
             sx={{

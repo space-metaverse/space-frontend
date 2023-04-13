@@ -509,6 +509,12 @@ export const spaceApi = createApi({
         body,
       })
     }),
+    getEventsBySpace: builder.query<any, { hubId: string }>({
+      query: ({ hubId }) => ({
+        url: `api/v1/all_events_for_hub?hub_sid=${hubId}`,
+        method: 'GET',
+      })
+    }),
   })
 })
 
@@ -536,4 +542,5 @@ export const {
   usePostOrderMutation,
   useGetTicketQuery,
   useLazyGetTicketQuery,
+  useGetEventsBySpaceQuery,
 } = spaceApi
