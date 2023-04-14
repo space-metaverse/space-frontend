@@ -13,7 +13,7 @@ const Events = () => {
   }, [])
 
   return (
-    <Carousel>
+    <Carousel sx={{ pt: 2}}>
       {
         eventSlides?.map((slides: Event[], index: number) => (
           <Grid container pt={1} spacing={3} key={index}>

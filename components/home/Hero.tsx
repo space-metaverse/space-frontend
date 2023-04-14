@@ -1,8 +1,5 @@
 import { Typography, Box } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import Image from "next/image";
-import logoImage from "../../public/logo.png";
-import spaceHelmet from "../../public/space-helmet.png";
 
 const Hero = () => {
   return (
@@ -10,15 +7,41 @@ const Hero = () => {
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <Box
-            sx={{ background: "#1B1B1F", color: "white", borderRadius: "20px" }}
+            sx={(theme) => ({
+              color: "white",
+              borderRadius: "20px",
+              height: "100%",
+              position: "relative",
+              [theme.breakpoints.down("md")]: {
+                height: "30rem",
+              },
+            })}
           >
-            <Typography variant="h1" align="center" p={3}>
+            <Typography
+              variant="h1"
+              align="center"
+              p={3}
+              sx={(theme) => ({
+                position: "absolute",
+                width: "100%",
+                background: "#1B1B1F",
+                borderRadius: "20px 20px 0 0",
+                [theme.breakpoints.down("md")]: {
+                  fontSize: "3rem",
+                },
+              })}
+            >
               Your{" "}
               <Typography
                 color="#71717A"
                 variant="h1"
                 component="span"
                 fontWeight={500}
+                sx={(theme) => ({
+                  [theme.breakpoints.down("md")]: {
+                    fontSize: "3.5rem",
+                  },
+                })}
               >
                 Store
               </Typography>{" "}
@@ -32,7 +55,7 @@ const Hero = () => {
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-                borderRadius: "0 0 20px 20px",
+                borderRadius: "20px",
               }}
             >
               <source
@@ -78,24 +101,24 @@ const Hero = () => {
               justifyContent="center"
             >
               <Typography variant="h4" align="center" p={3}>
-              <video
-              autoPlay
-              loop
-              muted
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                borderRadius: "0 0 20px 20px",
-              }}
-            >
-              <source
-                src={
-                  "https://public-space-assets.s3.us-west-2.amazonaws.com/space-helmet.mp4"
-                }
-                type="video/mp4"
-              />
-            </video>
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "0 0 20px 20px",
+                  }}
+                >
+                  <source
+                    src={
+                      "https://public-space-assets.s3.us-west-2.amazonaws.com/space-helmet.mp4"
+                    }
+                    type="video/mp4"
+                  />
+                </video>
               </Typography>
             </Box>
           </Grid>
