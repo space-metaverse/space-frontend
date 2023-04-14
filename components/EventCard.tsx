@@ -6,6 +6,7 @@ import {
   CardActions,
   Button,
   Stack,
+  CardActionArea,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Countdown from "react-countdown";
@@ -61,27 +62,33 @@ const EventCard = ({
   return (
     <Card sx={{ height: "100%" }}>
       <Stack height="100%" justifyContent="space-between">
-        <CardMedia sx={{ height: 140 }} image={image} title={title} />
-        <CardContent>
-          <Typography variant="body2" color="text.secondary">
-            Event
-          </Typography>
-          <Typography gutterBottom variant="h6" component="div">
-            {title}
-          </Typography>
-          <Countdown
-            date={new Date(startDate * 1000).getTime()}
-            renderer={(props) => (
-              <LiveCountdown
-                {...props}
-                isLive={
-                  new Date(startDate * 1000).getTime() < new Date().getTime() &&
-                  new Date(endDate * 1000).getTime() > new Date().getTime()
-                }
-              />
-            )}
-          />
-        </CardContent>
+        <CardActionArea
+          onClick={() => router.push(`/events/${id}`)}
+          sx={{ height: "100%" }}
+        >
+          <CardMedia sx={{ height: 140 }} image={image} title={title} />
+          <CardContent>
+            <Typography variant="body2" color="text.secondary">
+              Event
+            </Typography>
+            <Typography gutterBottom variant="h6" component="div">
+              {title}
+            </Typography>
+            <Countdown
+              date={new Date(startDate * 1000).getTime()}
+              renderer={(props) => (
+                <LiveCountdown
+                  {...props}
+                  isLive={
+                    new Date(startDate * 1000).getTime() <
+                      new Date().getTime() &&
+                    new Date(endDate * 1000).getTime() > new Date().getTime()
+                  }
+                />
+              )}
+            />
+          </CardContent>
+        </CardActionArea>
         <CardActions sx={{ p: 2 }}>
           <Button
             size="small"
@@ -94,12 +101,12 @@ const EventCard = ({
           </Button>
           <Button
             size="small"
-            onClick={() => handleAddCartItem(timeslots?.[0]?.timeslot_sid)}
+            onClick={() => router.push(`/events/${id}`)}
             fullWidth
             color="primary"
             variant="contained"
           >
-            Add to Cart
+            Buy Now
           </Button>
         </CardActions>
       </Stack>

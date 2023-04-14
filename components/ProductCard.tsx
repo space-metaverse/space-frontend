@@ -6,6 +6,7 @@ import {
   Typography,
   Button,
   Stack,
+  CardActionArea,
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -65,48 +66,56 @@ const ProductCard = ({
   return (
     <Card sx={{ height: "100%" }}>
       <Stack height="100%" justifyContent="space-between">
-        <CardMedia sx={{ height: 140 }} title={title}>
-          <Image
-            src={image || spaceImage}
-            alt={title}
-            height={140}
-            width={300}
-            style={{ width: "100%", objectFit: "cover" }}
-          />
-        </CardMedia>
-        <CardContent>
-          <Typography variant="body2" color="text.secondary">
-            Product
-          </Typography>
-          <Typography gutterBottom variant="h6" component="div">
-            {title}
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            {owner}
-          </Typography>
-          <Typography variant="body1">
-            {formatCurrency(Number(price) ?? 0)}
-          </Typography>
-        </CardContent>
+        <CardActionArea
+          onClick={() => router.push(`/products/${productId}`)}
+          sx={{ height: "100%" }}
+        >
+          <CardMedia sx={{ height: 140 }} title={title}>
+            <Image
+              src={image || spaceImage}
+              alt={title}
+              height={140}
+              width={300}
+              style={{ width: "100%", objectFit: "cover" }}
+            />
+          </CardMedia>
+          <CardContent>
+            <Typography variant="body2" color="text.secondary">
+              Product
+            </Typography>
+            <Typography gutterBottom variant="h6" component="div">
+              {title}
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              {owner}
+            </Typography>
+            <Typography variant="body1">
+              {formatCurrency(Number(price) ?? 0)}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
         <CardActions sx={{ p: 2 }}>
           <Button
             size="small"
-            onClick={() => router.push(`/products/${productId}`)}
+            onClick={() => handleAddCartItem(productId)}
             fullWidth
             color="secondary"
             variant="outlined"
           >
-            Visit Product
+            Add to Cart
           </Button>
           <Button
             size="small"
-            onClick={() => handleAddCartItem(productId)}
+            onClick={async () => {
+              await handleAddCartItem(productId);
+              router.push(`/checkout`);
+            }}
             fullWidth
             color="primary"
             disabled={quantity === 0}
             variant="contained"
           >
-            {quantity > 0 ? "Add to Cart" : "Out of Stock"}
+            {quantity > 0 ? "Buy Now" : "Out of Stock"}
           </Button>
         </CardActions>
       </Stack>
