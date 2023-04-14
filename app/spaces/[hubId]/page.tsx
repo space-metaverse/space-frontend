@@ -162,7 +162,7 @@ const Spaces = () => {
             {eventsData?.data?.map((event: any, index: number) => (
               <Box pt={2} key={`${event.name}-${index}}`}>
                 <EventCard
-                  id={event.timeslots?.[0]?.timeslot_sid}
+                  id={event.event_sid}
                   hubId={event.hub_id}
                   startDate={event.start_date}
                   endDate={event.end_date}

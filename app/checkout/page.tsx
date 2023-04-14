@@ -24,6 +24,7 @@ import {
   useGetCartItemsQuery,
   usePostOrderMutation,
   useLazyGetTicketQuery,
+  usePostTicketTimerMutation,
 } from "../../api/space";
 import { formatCurrency } from "../../helpers";
 import { MuiTelInput } from "mui-tel-input";
@@ -83,6 +84,23 @@ const Checkout = () => {
     },
   ] = usePostOrderMutation();
 
+  const [
+    postTicketTimer,
+    {
+      isLoading: postTicketTimerLoading,
+      isSuccess: postTicketTimerSuccess,
+      isError: postTicketTimerError,
+    },
+  ] = usePostTicketTimerMutation();
+
+  useEffect(() => {
+    tickets.forEach(async (ticket: any) => {
+      await postTicketTimer({
+        tickets: tickets.map((ticket: any) => ticket.id),
+      });
+    });
+  }, [postTicketTimer, tickets]);
+
   useEffect(() => {
     cartData?.data.forEach(async (entry: any) => {
       if (entry?.quantity > 0) {
@@ -141,7 +159,7 @@ const Checkout = () => {
     );
   }, [products, selectedHubId, tickets]);
 
-  console.log(products, tickets)
+  console.log(products, tickets);
 
   const amount = useMemo(() => {
     return [...products, ...tickets]
@@ -194,6 +212,13 @@ const Checkout = () => {
     console.log(error);
   };
 
+  const refreshCart = async () => {
+    setProducts([]);
+    setTickets([]);
+    setSelectedHubId("");
+    await refetchCart();
+  };
+
   return (
     <Box
       pl={3}
@@ -241,7 +266,7 @@ const Checkout = () => {
                   price={formatCurrency(Number(item.price))}
                   image={item.image}
                   quantity={item.quantity}
-                  refetchCart={refetchCart}
+                  refetchCart={refreshCart}
                 />
               </Grid>
             ))}

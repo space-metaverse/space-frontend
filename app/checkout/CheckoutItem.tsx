@@ -38,7 +38,8 @@ const CheckoutItem = ({
     await deleteCartItem({
       hub_sid: hubId,
       item: {
-        product_variation_sid: id,
+        ...(type === "ticket" && { timeslot_sid: id }),
+        ...(type === "product" && { product_variation_sid: id }),
       },
       quantity: 1,
     });
