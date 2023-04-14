@@ -18,7 +18,7 @@ import { useState } from "react";
 import { Stack } from "@mui/system";
 import { useAppDispatch } from "../../../redux/hooks";
 import { addCartItem } from "../../../redux/slices/cart";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAddCartItemMutation, useGetProductQuery } from "../../../api/space";
 import { formatCurrency } from "../../../helpers";
 import miley from "../../../public/miley.png";
@@ -27,6 +27,8 @@ const sizes = ["Size 1", "Size 2", "Size 3"];
 
 const ProductPage = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
+
   const [size, setSize] = useState(sizes[0]);
   const [quantity, setQuantity] = useState(1);
 
@@ -141,6 +143,12 @@ const ProductPage = () => {
                     color="primary"
                     size="large"
                     fullWidth
+                    onClick={async () => {
+                      await handleAddCartItem(productId);
+                      setTimeout(() => {
+                        router.push("/checkout");
+                      }, 1500);
+                    }}
                   >
                     Buy now
                   </Button>

@@ -109,7 +109,9 @@ const ProductCard = ({
             size="medium"
             onClick={async () => {
               await handleAddCartItem(productId);
-              router.push(`/checkout`);
+              setTimeout(() => {
+                router.push("/checkout");
+              }, 1500);
             }}
             fullWidth
             color="primary"
