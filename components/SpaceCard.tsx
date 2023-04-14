@@ -6,6 +6,7 @@ import {
   Typography,
   Button,
   Stack,
+  CardActionArea,
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -31,27 +32,32 @@ const SpaceCard = ({
   return (
     <Card sx={{ height: "100%" }}>
       <Stack height="100%" justifyContent="space-between">
-        <CardMedia sx={{ height: 250 }} title={title}>
-          <Image
-            src={image || spaceImage}
-            alt={title}
-            height={250}
-            width={300}
-            style={{ width: "100%", objectFit: "cover" }}
-          />
-        </CardMedia>
-        <CardContent>
-          <Typography gutterBottom variant="h6" component="div">
-            {title}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            By: {owner}
-          </Typography>
-          <Typography variant="body1" color="text.secondary" mt={2}>
-            {description}
-          </Typography>
-        </CardContent>
-        <CardActions sx={{ p: 2}}>
+        <CardActionArea
+          onClick={() => router.push(`/spaces/${hubId}`)}
+          sx={{ height: "100%" }}
+        >
+          <CardMedia sx={{ height: 250 }} title={title}>
+            <Image
+              src={image || spaceImage}
+              alt={title}
+              height={250}
+              width={300}
+              style={{ width: "100%", objectFit: "cover" }}
+            />
+          </CardMedia>
+          <CardContent>
+            <Typography gutterBottom variant="h6" component="div">
+              {title}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              By: {owner}
+            </Typography>
+            <Typography variant="body1" color="text.secondary" mt={2}>
+              {description}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        <CardActions sx={{ p: 2 }}>
           <Button
             size="large"
             onClick={() => router.push(`/spaces/${hubId}`)}
