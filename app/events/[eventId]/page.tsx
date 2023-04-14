@@ -18,7 +18,7 @@ import { Stack } from "@mui/system";
 import { useAppDispatch } from "../../../redux/hooks";
 import { addCartItem } from "../../../redux/slices/cart";
 import { useAddCartItemMutation, useGetEventQuery } from "../../../api/space";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Skeleton } from "@space-metaverse-ag/space-ui";
 import Countdown from "react-countdown";
 import LiveCountdown from "../../../components/LiveCountdown";
@@ -29,6 +29,7 @@ const sizes = ["Size 1", "Size 2", "Size 3"];
 const EventPage = () => {
   const dispatch = useAppDispatch();
   const pathname = usePathname();
+  const router = useRouter();
   const eventId = pathname.split("/")[2];
   const [size, setSize] = useState(sizes[0]);
   const [selectedTimeslot, setSelectedTimeslot] = useState<string | null>(null);
@@ -62,7 +63,7 @@ const EventPage = () => {
     }
   }, [eventData?.timeslots, eventSuccess]);
 
-  const handleAddCartItem = async (id: string) => {
+  const handleAddCartItem = async () => {
     if (!selectedTimeslot) return;
     await postCartItem({
       hub_sid: String(eventData?.hub_sid),
@@ -167,11 +168,7 @@ const EventPage = () => {
               size="large"
               fullWidth
               disabled={!selectedTimeslot}
-              onClick={() =>
-                handleAddCartItem(
-                  String(eventData?.timeslots?.[0]?.timeslot_sid)
-                )
-              }
+              onClick={handleAddCartItem}
             >
               Add ticket to cart
             </Button>
@@ -181,6 +178,12 @@ const EventPage = () => {
               size="large"
               fullWidth
               disabled={!selectedTimeslot}
+              onClick={async () => {
+                await handleAddCartItem();
+                setTimeout(() => {
+                  router.push("/checkout");
+                }, 1500);
+              }}
             >
               Buy Ticket now
             </Button>
