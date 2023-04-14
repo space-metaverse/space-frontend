@@ -190,10 +190,7 @@ const Checkout = () => {
           })),
         tickets: tickets
           .filter((t: any) => t.hubId === selectedHubId)
-          .map((ticket: any) => ({
-            timeslot_sid: ticket.id,
-            quantity: ticket.quantity,
-          })),
+          .map((ticket: any) => ticket.id),
       },
       customer: {
         name: "cjft",
