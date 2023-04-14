@@ -60,7 +60,7 @@ const EventCard = ({
   };
 
   return (
-    <Card sx={{ height: "100%" }}>
+    <Card sx={{ height: "100%", borderRadius: 3 }}>
       <Stack height="100%" justifyContent="space-between">
         <CardActionArea
           onClick={() => router.push(`/events/${id}`)}
@@ -89,9 +89,9 @@ const EventCard = ({
             />
           </CardContent>
         </CardActionArea>
-        <CardActions sx={{ p: 2 }}>
+        <CardActions sx={{ p: 3, pl: 4, pr: 4, gap: 3 }}>
           <Button
-            size="small"
+            size="medium"
             onClick={() => router.push(`/events/${id}`)}
             fullWidth
             color="secondary"
@@ -100,7 +100,7 @@ const EventCard = ({
             Learn More
           </Button>
           <Button
-            size="small"
+            size="medium"
             onClick={() => router.push(`/events/${id}`)}
             fullWidth
             color="primary"
