@@ -328,6 +328,28 @@ interface PostOrderResponse {
 
 }
 
+interface PostTicketTimerRequest {
+  tickets: string[]
+}
+
+interface PostTicketTimerResponse {
+  ok: {
+    tickets_available: Array<{
+      ok: {
+        tickets_available: number
+        timeslot_sid: string
+      },
+    }>,
+    timers: Array<{
+      ok: {
+        status: string
+        timeslot: string
+        users_in_queue: number
+      }
+    }>
+  }
+}
+
 export const spaceApi = createApi({
   reducerPath: 'spaceApi',
   baseQuery: fetchBaseQuery({ baseUrl: getBaseURL() }),
@@ -515,6 +537,16 @@ export const spaceApi = createApi({
         method: 'GET',
       })
     }),
+    postTicketTimer: builder.mutation<PostTicketTimerResponse, PostTicketTimerRequest>({
+      query: (body) => ({
+        url: `/api/v1/new_ticket/ticket_purchase_timer_init`,
+        method: 'POST',
+        body: {
+          ...body,
+          account_id: window.localStorage.getItem('accountId') as string
+        }
+      })
+    }),
   })
 })
 
@@ -543,4 +575,5 @@ export const {
   useGetTicketQuery,
   useLazyGetTicketQuery,
   useGetEventsBySpaceQuery,
+  usePostTicketTimerMutation
 } = spaceApi
