@@ -64,7 +64,7 @@ const ProductCard = ({
   };
 
   return (
-    <Card sx={{ height: "100%" }}>
+    <Card sx={{ height: "100%", borderRadius: 3 }}>
       <Stack height="100%" justifyContent="space-between">
         <CardActionArea
           onClick={() => router.push(`/products/${productId}`)}
@@ -94,18 +94,19 @@ const ProductCard = ({
             </Typography>
           </CardContent>
         </CardActionArea>
-        <CardActions sx={{ p: 2 }}>
+        <CardActions sx={{ p: 3, pl: 4, pr: 4, gap: 3 }}>
           <Button
-            size="small"
+            size="medium"
             onClick={() => handleAddCartItem(productId)}
             fullWidth
             color="secondary"
             variant="outlined"
+            disabled={quantity === 0}
           >
             Add to Cart
           </Button>
           <Button
-            size="small"
+            size="medium"
             onClick={async () => {
               await handleAddCartItem(productId);
               router.push(`/checkout`);

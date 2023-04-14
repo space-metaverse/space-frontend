@@ -14,6 +14,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Alert,
 } from "@mui/material";
 import CheckoutItem from "./CheckoutItem";
 import StripeCheckout from "../../components/StripeCheckout";
@@ -531,6 +532,16 @@ const Checkout = () => {
               {formattedAmount}
             </Typography>
           </Stack>
+          {postOrderSuccess && (
+            <Alert severity="success">
+              Your order has been placed successfully!
+            </Alert>
+          )}
+          {postOrderError && (
+            <Alert severity="error">
+              There was an error placing your order.
+            </Alert>
+          )}
         </Box>
       )}
 
