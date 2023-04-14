@@ -2,22 +2,15 @@ import { Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import Image from "next/image";
 import logoImage from "../public/logo.png";
+import Link from "next/link";
 
 const footerItems = [
   {
     title: "Metaverse",
     children: [
       {
-        title: "Token",
-        href: "/token",
-      },
-      {
-        title: "Litepaper",
-        href: "/litepaper",
-      },
-      {
         title: "Builder",
-        href: "/builder",
+        href: "https://app.tryspace.com/spoke/projects",
       },
     ],
   },
@@ -25,24 +18,16 @@ const footerItems = [
     title: "Space",
     children: [
       {
-        title: "About",
-        href: "/about",
-      },
-      {
-        title: "Team",
-        href: "/team",
-      },
-      {
         title: "Career",
-        href: "/career",
+        href: "https://spacemetaverseag.bamboohr.com/jobs/",
       },
       {
         title: "FAQ",
-        href: "/faq",
+        href: "https://app.tryspace.com/faq",
       },
       {
         title: "Contact",
-        href: "/contact",
+        href: "https://www.tryspace.com/#",
       },
     ],
   },
@@ -51,7 +36,7 @@ const footerItems = [
     children: [
       {
         title: "Create Account",
-        href: "/register",
+        href: "/signup",
       },
       {
         title: "Log In",
@@ -59,7 +44,10 @@ const footerItems = [
       },
       {
         title: "My Account",
-        href: "/account",
+        href:
+          process.env.NEXT_PUBLIC_ENV === "prod"
+            ? "https://account.tryspace.com"
+            : "https://account.qa.tryspace.com",
       },
     ],
   },
@@ -68,23 +56,27 @@ const footerItems = [
     children: [
       {
         title: "Instagram",
-        href: "/instagram",
+        href: "https://www.instagram.com/spacemetaverse/",
       },
       {
         title: "Twitter",
-        href: "/twitter",
+        href: "https://twitter.com/spacemetaverse",
       },
       {
         title: "Discord",
-        href: "/discord",
+        href: "https://discord.gg/qRu9G2HnwC",
       },
       {
         title: "Telegram",
-        href: "/facebook",
+        href: "https://t.me/spacemetaverse",
+      },
+      {
+        title: "Facebook",
+        href: "https://www.facebook.com/SpaceMetaverse",
       },
       {
         title: "LinkedIn",
-        href: "/linkedin",
+        href: "https://www.linkedin.com/company/space-metaverse/mycompany/",
       },
     ],
   },
@@ -122,9 +114,19 @@ const Footer = () => {
               <Box sx={{ mt: 2 }}>
                 {item.children.map((child, index) => (
                   <Box sx={{ mt: 1 }} key={child.title + index}>
-                    <Typography variant="body2" sx={{ color: "#fff" }}>
-                      {child.title}
-                    </Typography>
+                    <Link href={child.href} target="__blank">
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: "#fff",
+                          "&:hover": {
+                            textDecoration: "underline",
+                          },
+                        }}
+                      >
+                        {child.title}
+                      </Typography>
+                    </Link>
                   </Box>
                 ))}
               </Box>
@@ -135,7 +137,7 @@ const Footer = () => {
       <Grid container sx={{ color: "white", pl: 2, pr: 20, pt: 5 }}>
         <Grid xs={12} md={6}>
           <Typography variant="body2" sx={{ color: "#fff" }}>
-            © 2023 Space Store. All rights reserved.
+            © {new Date().getFullYear()} Space Store. All rights reserved.
           </Typography>
           <Typography variant="body2" sx={{ color: "#fff", pt: 2 }}>
             Please see our Terms of Service and Privacy Policy.
