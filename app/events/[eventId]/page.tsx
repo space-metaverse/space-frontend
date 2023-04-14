@@ -154,8 +154,6 @@ const EventPage = () => {
                   )} - ${timeslot.quantity} tickets left`}
                   disabled={
                     timeslot.quantity === 0 ||
-                    timeslot.start_date >
-                      Math.round(new Date().getTime() / 1000) ||
                     timeslot.end_date < Math.round(new Date().getTime() / 1000)
                   }
                 />

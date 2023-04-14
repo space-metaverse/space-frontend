@@ -49,6 +49,9 @@ const SpaceCard = ({
             <Typography variant="body2" color="text.secondary">
               By: {owner}
             </Typography>
+            {
+              
+            }
             <Typography variant="body1" color="text.secondary" mt={2}>
               {description}
             </Typography>
