@@ -4,7 +4,6 @@ import { Box } from "@mui/system";
 import EmailSubscribe from "../components/home/EmailSubscribe";
 import Events from "../components/home/Events";
 import Hero from "../components/home/Hero";
-import Launches from "../components/home/Launches";
 import Spaces from "../components/home/Spaces";
 
 const Home = () => {

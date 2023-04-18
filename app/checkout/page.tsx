@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import CheckoutItem from "./CheckoutItem";
 import StripeCheckout from "../../components/StripeCheckout";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { getClientUrl } from "../../api/url";
 import {
   useLazyGetProductQuery,
@@ -26,6 +26,7 @@ import {
   usePostOrderMutation,
   useLazyGetTicketQuery,
   usePostTicketTimerMutation,
+  usePostPaymentIntentMutation,
 } from "../../api/space";
 import { formatCurrency } from "../../helpers";
 import { MuiTelInput } from "mui-tel-input";
@@ -37,6 +38,7 @@ enum CheckoutStep {
   Cart = 0,
   Shipping = 1,
   Payment = 2,
+  Result = 3,
 }
 
 const Checkout = () => {
@@ -93,6 +95,15 @@ const Checkout = () => {
       isError: postTicketTimerError,
     },
   ] = usePostTicketTimerMutation();
+
+  const [
+    postPaymentIntent,
+    {
+      data: postPaymentIntentData,
+      isLoading: postPaymentIntentLoading,
+      isSuccess: postPaymentIntentSuccess,
+    },
+  ] = usePostPaymentIntentMutation();
 
   useEffect(() => {
     tickets.forEach(async (ticket: any) => {
@@ -170,40 +181,61 @@ const Checkout = () => {
       }, 0);
   }, [products, selectedHubId, tickets]);
 
+  const handleStripeIntentSuccess = useCallback(
+    (paymentIntent: PaymentIntent) => {
+      console.log(paymentIntent);
+      postOrder({
+        data: {
+          account_id: window.localStorage.getItem("accountId") as string,
+          amount: amount * 100,
+          shipping_cost: 0,
+          currency: "usd",
+          status: "payment_processing",
+          live_mode: false,
+          hub_sid: selectedHubId,
+          payment_id: paymentIntent.id,
+          products: products
+            .filter((p: any) => p.hubId === selectedHubId)
+            .map((product: any) => ({
+              product_variation_sid: product.id,
+              quantity: product.quantity,
+            })),
+          tickets: tickets
+            .filter((t: any) => t.hubId === selectedHubId)
+            .map((ticket: any) => ticket.id),
+        },
+        customer: {
+          name: "cjft",
+          address_line_two: suite,
+          country,
+          zipcode: zipCode,
+          city,
+          state: region[0],
+          address,
+          email,
+          telephone: phone,
+        },
+      });
+    },
+    [
+      address,
+      amount,
+      city,
+      country,
+      email,
+      phone,
+      postOrder,
+      products,
+      region,
+      selectedHubId,
+      suite,
+      tickets,
+      zipCode,
+    ]
+  );
+
   const handleStripeSuccess = (paymentIntent: PaymentIntent) => {
-    console.log(paymentIntent, products);
-    postOrder({
-      data: {
-        account_id: window.localStorage.getItem("accountId") as string,
-        amount: amount * 100,
-        shipping_cost: 0,
-        currency: "usd",
-        status: "payment_processing",
-        live_mode: false,
-        hub_sid: selectedHubId,
-        payment_id: paymentIntent.id,
-        products: products
-          .filter((p: any) => p.hubId === selectedHubId)
-          .map((product: any) => ({
-            product_variation_sid: product.id,
-            quantity: product.quantity,
-          })),
-        tickets: tickets
-          .filter((t: any) => t.hubId === selectedHubId)
-          .map((ticket: any) => ticket.id),
-      },
-      customer: {
-        name: "cjft",
-        address_line_two: suite,
-        country,
-        zipcode: zipCode,
-        city,
-        state: region[0],
-        address,
-        email,
-        telephone: phone,
-      },
-    });
+    setActiveStep(CheckoutStep.Result);
   };
 
   const handleStripeError = (error: any) => {
@@ -216,6 +248,28 @@ const Checkout = () => {
     setSelectedHubId("");
     await refetchCart();
   };
+
+  useEffect(() => {
+    if (activeStep === CheckoutStep.Payment) {
+      console.log(amount);
+      postPaymentIntent({
+        amount,
+        metadata: {
+          type: "order",
+        },
+      });
+    }
+  }, [activeStep, amount, postPaymentIntent]);
+
+  useEffect(() => {
+    if (postPaymentIntentSuccess && postPaymentIntentData) {
+      handleStripeIntentSuccess(postPaymentIntentData);
+    }
+  }, [
+    postPaymentIntentSuccess,
+    postPaymentIntentData,
+    handleStripeIntentSuccess,
+  ]);
 
   return (
     <Box
@@ -235,7 +289,7 @@ const Checkout = () => {
       </Typography>
       <Stepper activeStep={activeStep}>
         {Object.values(CheckoutStep)
-          .slice(3, 6)
+          .slice(4, 8)
           .map((step, i) => (
             <Step
               key={`${step}-${i}`}
@@ -246,6 +300,7 @@ const Checkout = () => {
                 {step === CheckoutStep.Cart && " Review Cart"}
                 {step === CheckoutStep.Shipping && "Shipping"}
                 {step === CheckoutStep.Payment && "Payment"}
+                {step === CheckoutStep.Result && "Result"}
               </StepLabel>
             </Step>
           ))}
@@ -520,6 +575,8 @@ const Checkout = () => {
             submitText={"Finish Payment"}
             onSuccess={handleStripeSuccess}
             onError={handleStripeError}
+            onIntentSuccess={handleStripeIntentSuccess}
+            clientSecret={postPaymentIntentData?.clientSecret}
           />
           <Stack flexDirection="row" justifyContent="space-between" mt={3}>
             <Typography variant="h5" fontWeight={500}>
@@ -529,6 +586,11 @@ const Checkout = () => {
               {formattedAmount}
             </Typography>
           </Stack>
+        </Box>
+      )}
+
+      {activeStep === CheckoutStep.Result && (
+        <Box>
           {postOrderSuccess && (
             <Alert severity="success">
               Your order has been placed successfully!
