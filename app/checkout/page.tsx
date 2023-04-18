@@ -33,6 +33,7 @@ import { MuiTelInput } from "mui-tel-input";
 import Image from "next/image";
 import { allCountries } from "country-region-data";
 import { PaymentIntent } from "@stripe/stripe-js";
+import Link from "next/link";
 
 enum CheckoutStep {
   Cart = 0,
@@ -717,8 +718,13 @@ const Checkout = () => {
       {cartError && (
         <Stack alignItems="center" width="100%" p={8}>
           <Typography variant="h5" fontWeight={500}>
-            There was an error loading your cart.
+            Please Login to Checkout
           </Typography>
+          <Link href={`/login?redirect=${window.location.href}`}>
+            <Button variant="contained" size="large" sx={{ mt: 2 }}>
+              Login
+            </Button>
+          </Link>
         </Stack>
       )}
     </Box>
