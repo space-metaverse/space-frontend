@@ -47,6 +47,7 @@ const Checkout = () => {
   const [activeStep, setActiveStep] = useState<CheckoutStep>(CheckoutStep.Cart);
 
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [phone, setPhone] = useState("+1");
   const [country, setCountry] = useState("");
   const [region, setRegion] = useState("");
@@ -56,6 +57,9 @@ const Checkout = () => {
   const [suite, setSuite] = useState("");
   const [deliveryNotes, setDeliveryNotes] = useState("");
   const [selectedHubId, setSelectedHubId] = useState("");
+  const [shippingErrors, setShippingErrors] = useState<Record<string, string>>(
+    {}
+  );
 
   const {
     data: cartData,
@@ -104,6 +108,68 @@ const Checkout = () => {
       isSuccess: postPaymentIntentSuccess,
     },
   ] = usePostPaymentIntentMutation();
+
+  const isShippingValid = useMemo(() => {
+    setShippingErrors({});
+    let isValid = true;
+    if (!email) {
+      setShippingErrors((oldErrors: any) => ({
+        ...oldErrors,
+        email: "Email is required",
+      }));
+      isValid = false;
+    }
+    if (!name) {
+      setShippingErrors((oldErrors: any) => ({
+        ...oldErrors,
+        name: "Name is required",
+      }));
+      isValid = false;
+    }
+    if (!phone || phone.length < 10) {
+      setShippingErrors((oldErrors: any) => ({
+        ...oldErrors,
+        phone: "Phone is required",
+      }));
+      isValid = false;
+    }
+    if (!country) {
+      setShippingErrors((oldErrors: any) => ({
+        ...oldErrors,
+        country: "Country is required",
+      }));
+      isValid = false;
+    }
+    if (!region) {
+      setShippingErrors((oldErrors: any) => ({
+        ...oldErrors,
+        region: "Region is required",
+      }));
+      isValid = false;
+    }
+    if (!city) {
+      setShippingErrors((oldErrors: any) => ({
+        ...oldErrors,
+        city: "City is required",
+      }));
+      isValid = false;
+    }
+    if (!zipCode) {
+      setShippingErrors((oldErrors: any) => ({
+        ...oldErrors,
+        zipCode: "Zip code is required",
+      }));
+      isValid = false;
+    }
+    if (!address) {
+      setShippingErrors((oldErrors: any) => ({
+        ...oldErrors,
+        address: "Address is required",
+      }));
+      isValid = false;
+    }
+    return isValid;
+  }, [address, city, country, email, name, phone, region, zipCode]);
 
   useEffect(() => {
     tickets.forEach(async (ticket: any) => {
@@ -371,14 +437,33 @@ const Checkout = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 fullWidth
+                error={!!shippingErrors.email}
+                helperText={shippingErrors.email}
               />
             </Grid>
+
+            <Grid xs={12} lg={6}>
+              <TextField
+                id="outlined-basic"
+                label="Name"
+                variant="outlined"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                fullWidth
+                error={!!shippingErrors.name}
+                helperText={shippingErrors.name}
+              />
+            </Grid>
+
             <Grid xs={12} lg={6}>
               <MuiTelInput
                 value={phone}
                 onChange={(value: string) => setPhone(value)}
                 defaultCountry="us"
                 fullWidth
+                error={!!shippingErrors.phone}
+                helperText={shippingErrors.phone}
               />
             </Grid>
 
@@ -402,6 +487,8 @@ const Checkout = () => {
                       ...params.inputProps,
                       autoComplete: "new-password",
                     }}
+                    error={!!shippingErrors.country}
+                    helperText={shippingErrors.country}
                   />
                 )}
                 openOnFocus
@@ -446,6 +533,8 @@ const Checkout = () => {
                       ...params.inputProps,
                       autoComplete: "new-password",
                     }}
+                    error={!!shippingErrors.region}
+                    helperText={shippingErrors.region}
                   />
                 )}
                 openOnFocus
@@ -478,6 +567,8 @@ const Checkout = () => {
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
                 fullWidth
+                error={!!shippingErrors.city}
+                helperText={shippingErrors.city}
               />
             </Grid>
 
@@ -489,6 +580,8 @@ const Checkout = () => {
                 value={zipCode}
                 onChange={(e) => setZipCode(e.target.value)}
                 fullWidth
+                error={!!shippingErrors.zipCode}
+                helperText={shippingErrors.zipCode}
               />
             </Grid>
 
@@ -500,6 +593,8 @@ const Checkout = () => {
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 fullWidth
+                error={!!shippingErrors.address}
+                helperText={shippingErrors.address}
               />
             </Grid>
 
@@ -554,6 +649,7 @@ const Checkout = () => {
           </Grid>
 
           <Button
+            disabled={!isShippingValid}
             onClick={() => setActiveStep(CheckoutStep.Payment)}
             fullWidth
             variant="contained"

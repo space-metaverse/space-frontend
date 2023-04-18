@@ -83,6 +83,7 @@ const TopNav = () => {
       window.localStorage.removeItem("username");
       window.localStorage.removeItem("immerToken");
       window.localStorage.removeItem("hubsToken");
+      window.localStorage.removeItem("accountId");
     }
     router.push(path);
     handleCloseNavMenu();
