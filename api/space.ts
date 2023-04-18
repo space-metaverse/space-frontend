@@ -244,6 +244,7 @@ export interface Room {
   updated_at: string
   url: string
   created_by_username: string
+  categories: { slug: string }[]
 }
 
 interface AddCartItemRequest {

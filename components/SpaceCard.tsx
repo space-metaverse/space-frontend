@@ -6,6 +6,7 @@ import {
   Button,
   Stack,
   CardActionArea,
+  Chip,
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -18,6 +19,7 @@ interface SpaceCardProps {
   owner: string;
   image: string;
   description?: string;
+  categories?: { slug: string }[];
 }
 
 const SpaceCard = ({
@@ -26,6 +28,7 @@ const SpaceCard = ({
   owner,
   image,
   description,
+  categories,
 }: SpaceCardProps) => {
   const router = useRouter();
 
@@ -49,7 +52,15 @@ const SpaceCard = ({
             <Typography variant="body2" color="text.secondary">
               By: {owner}
             </Typography>
-            {}
+            <Stack mt={2} flexDirection="row" gap={1}>
+              {categories?.map((category) => (
+                <Chip
+                  key={category.slug}
+                  label={category.slug}
+                  sx={{ color: "text.secondary" }}
+                />
+              ))}
+            </Stack>
             <Typography variant="body1" color="text.secondary" mt={2}>
               {description}
             </Typography>

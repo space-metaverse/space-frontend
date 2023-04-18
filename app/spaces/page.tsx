@@ -26,6 +26,7 @@ const Spaces = () => {
                 title={space.name}
                 owner={space.commerce_type}
                 image={space.screenshot_url}
+                categories={space.categories}
               />
             </Grid>
           ))

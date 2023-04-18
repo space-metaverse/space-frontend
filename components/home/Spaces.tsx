@@ -34,6 +34,7 @@ const Spaces = () => {
                 owner={String(space.created_by_username)}
                 image={space.screenshot_url}
                 description={space.description}
+                categories={space.categories}
               />
             </Grid>
           ))}
