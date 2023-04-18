@@ -3,7 +3,6 @@ import {
   Card,
   CardMedia,
   CardContent,
-  CardActions,
   Button,
   Stack,
   CardActionArea,
@@ -14,6 +13,7 @@ import LiveCountdown from "./LiveCountdown";
 import { useAppDispatch } from "../redux/hooks";
 import { useAddCartItemMutation } from "../api/space";
 import { addCartItem } from "../redux/slices/cart";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 interface EventCardProps {
   id: string;
@@ -89,26 +89,30 @@ const EventCard = ({
             />
           </CardContent>
         </CardActionArea>
-        <CardActions sx={{ p: 3, pl: 4, pr: 4, gap: 3 }}>
-          <Button
-            size="medium"
-            onClick={() => router.push(`/events/${id}`)}
-            fullWidth
-            color="secondary"
-            variant="outlined"
-          >
-            Learn More
-          </Button>
-          <Button
-            size="medium"
-            onClick={() => router.push(`/events/${id}`)}
-            fullWidth
-            color="primary"
-            variant="contained"
-          >
-            Buy Now
-          </Button>
-        </CardActions>
+        <Grid container spacing={2}>
+          <Grid xs={12} lg={6}>
+            <Button
+              size="medium"
+              onClick={() => router.push(`/events/${id}`)}
+              fullWidth
+              color="secondary"
+              variant="outlined"
+            >
+              Learn More
+            </Button>
+          </Grid>
+          <Grid xs={12} lg={6}>
+            <Button
+              size="medium"
+              onClick={() => router.push(`/events/${id}`)}
+              fullWidth
+              color="primary"
+              variant="contained"
+            >
+              Buy Now
+            </Button>
+          </Grid>
+        </Grid>
       </Stack>
     </Card>
   );
