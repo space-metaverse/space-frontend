@@ -274,7 +274,7 @@ const Checkout = () => {
             .map((ticket: any) => ticket.id),
         },
         customer: {
-          name: "cjft",
+          name,
           address_line_two: suite,
           country,
           zipcode: zipCode,
@@ -292,6 +292,7 @@ const Checkout = () => {
       city,
       country,
       email,
+      name,
       phone,
       postOrder,
       products,
@@ -413,9 +414,17 @@ const Checkout = () => {
             size="large"
             variant="contained"
             sx={{ mt: 2 }}
+            disabled={!amount || !selectedHubId || postTicketTimerError}
           >
             Continue to Shipping
           </Button>
+
+          {postTicketTimerError && (
+            <Alert severity="error" sx={{ mt: 3 }}>
+              Ticket timer has expired. Please delete the ticket and try to buy
+              another one.
+            </Alert>
+          )}
         </>
       )}
 
