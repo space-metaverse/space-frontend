@@ -114,6 +114,9 @@ const Checkout = () => {
   }, [postTicketTimer, tickets]);
 
   useEffect(() => {
+    setProducts([]);
+    setTickets([]);
+
     cartData?.data.forEach(async (entry: any) => {
       if (entry?.quantity > 0) {
         if (entry?.item) {
@@ -291,11 +294,7 @@ const Checkout = () => {
         {Object.values(CheckoutStep)
           .slice(4, 8)
           .map((step, i) => (
-            <Step
-              key={`${step}-${i}`}
-              onClick={() => setActiveStep(i)}
-              completed={activeStep > i}
-            >
+            <Step key={`${step}-${i}`} completed={activeStep > i}>
               <StepLabel>
                 {step === CheckoutStep.Cart && " Review Cart"}
                 {step === CheckoutStep.Shipping && "Shipping"}
