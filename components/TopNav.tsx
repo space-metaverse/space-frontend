@@ -21,8 +21,12 @@ import {
   AppBar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { useAppSelector } from "../redux/hooks";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import GridViewIcon from "@mui/icons-material/GridView";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -44,9 +48,10 @@ const TopNav = () => {
   const cartItems = useAppSelector((state) => state.cart.items);
 
   const settings = [
-    ...(!username ? ["Login"] : []),
-    ...(username ? ["Profile"] : []),
-    ...(username ? ["Logout"] : []),
+    ...(!username ? [{ title: "Login", icon: <AccountCircleIcon /> }] : []),
+    ...(username ? [{ title: "Profile", icon: <AccountCircleIcon /> }] : []),
+    ...(username ? [{ title: "My Spaces", icon: <GridViewIcon /> }] : []),
+    ...(username ? [{ title: "Logout", icon: <LogoutIcon /> }] : []),
   ];
 
   const handleNavigate = (page: string) => {
@@ -64,7 +69,10 @@ const TopNav = () => {
       path = "/about";
     }
     if (page === "Profile") {
-      path = "/profile";
+      path =
+        process.env.NEXT_PUBLIC_ENV === "prod"
+          ? "https://account.tryspace.com"
+          : "https://account.qa.tryspace.com";
     }
     if (page === "Login") {
       path = "/login";
@@ -165,26 +173,54 @@ const TopNav = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Stack direction="row" spacing={2}>
+            <Stack
+              direction="row"
+              spacing={2}
+              justifyContent="center"
+              alignItems="center"
+            >
               <IconButton
                 aria-label="cart"
                 onClick={() => router.push("/checkout")}
               >
                 <StyledBadge
                   badgeContent={String(cartItems.length ?? 0)}
-                  color="secondary"
+                  sx={{
+                    mr: 1,
+                    "& .MuiBadge-badge": {
+                      backgroundColor: "#00ab00",
+                      color: "white",
+                      left: 20,
+                      top: 18,
+                    },
+                  }}
                 >
-                  <ShoppingCartIcon />
+                  <ShoppingCartOutlinedIcon
+                    sx={{ fontSize: "2rem", color: "black" }}
+                  />
                 </StyledBadge>
               </IconButton>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt={username} src="/static/images/avatar/2.jpg" />
+              {username && (
+                <IconButton sx={{ p: 0 }}>
+                  <Avatar alt={username} src={"/avatar.png"} />
+                </IconButton>
+              )}
+              <Typography
+                sx={{ display: { xs: "none", md: "block" } }}
+                variant="h6"
+              >
+                {username}
+              </Typography>
+              <Tooltip title="Open settings" onClick={handleOpenUserMenu}>
+                <IconButton aria-label="settings">
+                  <MoreVertIcon
+                    sx={{ color: "#3f3ff7", fontSize: 35, cursor: "pointer" }}
+                  />
                 </IconButton>
               </Tooltip>
             </Stack>
             <Menu
-              sx={{ mt: "45px" }}
+              sx={{ mt: "55px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -199,9 +235,24 @@ const TopNav = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={() => handleNavigate(setting)}>
-                  <Typography textAlign="center">{setting}</Typography>
+              {settings.map(({ title, icon }) => (
+                <MenuItem
+                  key={title}
+                  onClick={() => handleNavigate(title)}
+                  sx={{
+                    width: "20rem",
+                    padding: "0rem 1rem",
+                  }}
+                >
+                  {icon}
+                  <Typography
+                    textAlign="center"
+                    variant="overline"
+                    fontSize={20}
+                    pl={3}
+                  >
+                    {title}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
