@@ -12,7 +12,7 @@ const Home = () => {
     <Box
       p={3}
       sx={(theme) => ({
-        [theme.breakpoints.up("md")]: {
+        [theme.breakpoints.up("lg")]: {
           paddingRight: "15%",
           paddingLeft: "15%",
         },

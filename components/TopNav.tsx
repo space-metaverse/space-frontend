@@ -27,6 +27,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import GridViewIcon from "@mui/icons-material/GridView";
 import LogoutIcon from "@mui/icons-material/Logout";
+import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -48,7 +49,7 @@ const TopNav = () => {
   const cartItems = useAppSelector((state) => state.cart.items);
 
   const settings = [
-    ...(!username ? [{ title: "Login", icon: <AccountCircleIcon /> }] : []),
+    ...(!username ? [{ title: "Sign In", icon: <AccountCircleIcon /> }] : []),
     ...(username ? [{ title: "Profile", icon: <AccountCircleIcon /> }] : []),
     ...(username ? [{ title: "My Spaces", icon: <GridViewIcon /> }] : []),
     ...(username ? [{ title: "Logout", icon: <LogoutIcon /> }] : []),
@@ -74,7 +75,7 @@ const TopNav = () => {
           ? "https://account.tryspace.com"
           : "https://account.qa.tryspace.com";
     }
-    if (page === "Login") {
+    if (page === "Sign In") {
       path = "/login";
     }
     if (page === "Logout") {
@@ -175,7 +176,7 @@ const TopNav = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Stack
               direction="row"
-              spacing={2}
+              spacing={1}
               justifyContent="center"
               alignItems="center"
             >
@@ -186,7 +187,7 @@ const TopNav = () => {
                 <StyledBadge
                   badgeContent={String(cartItems.length ?? 0)}
                   sx={{
-                    mr: 1,
+                    mr: 3,
                     "& .MuiBadge-badge": {
                       backgroundColor: "#00ab00",
                       color: "white",
@@ -204,6 +205,16 @@ const TopNav = () => {
                 <IconButton sx={{ p: 0 }}>
                   <Avatar alt={username} src={"/avatar.png"} />
                 </IconButton>
+              )}
+              {!username && (
+                <Link href={"/login"}>
+                  <Stack flexDirection="row">
+                    <LoginOutlinedIcon
+                      sx={{ fontSize: "2rem", color: "black", mr: 1 }}
+                    />
+                    <Typography variant="h6">SIGN IN</Typography>
+                  </Stack>
+                </Link>
               )}
               <Typography
                 sx={{ display: { xs: "none", md: "block" } }}
