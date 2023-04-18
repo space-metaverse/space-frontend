@@ -1,6 +1,5 @@
 import {
   Card,
-  CardActions,
   CardContent,
   CardMedia,
   Typography,
@@ -15,6 +14,7 @@ import { useAppDispatch } from "../redux/hooks";
 import { addCartItem } from "../redux/slices/cart";
 import spaceImage from "../public/space-store.png";
 import { formatCurrency } from "../helpers";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
 interface ProductCardProps {
   productId: string;
@@ -94,33 +94,37 @@ const ProductCard = ({
             </Typography>
           </CardContent>
         </CardActionArea>
-        <CardActions sx={{ p: 3, pl: 4, pr: 4, gap: 3 }}>
-          <Button
-            size="medium"
-            onClick={() => handleAddCartItem(productId)}
-            fullWidth
-            color="secondary"
-            variant="outlined"
-            disabled={quantity === 0}
-          >
-            Add to Cart
-          </Button>
-          <Button
-            size="medium"
-            onClick={async () => {
-              await handleAddCartItem(productId);
-              setTimeout(() => {
-                router.push("/checkout");
-              }, 1500);
-            }}
-            fullWidth
-            color="primary"
-            disabled={quantity === 0}
-            variant="contained"
-          >
-            {quantity > 0 ? "Buy Now" : "Out of Stock"}
-          </Button>
-        </CardActions>
+        <Grid container spacing={2}>
+          <Grid xs={12} lg={6}>
+            <Button
+              size="medium"
+              onClick={() => handleAddCartItem(productId)}
+              fullWidth
+              color="secondary"
+              variant="outlined"
+              disabled={quantity === 0}
+            >
+              Add to Cart
+            </Button>
+          </Grid>
+          <Grid xs={12} lg={6}>
+            <Button
+              size="medium"
+              onClick={async () => {
+                await handleAddCartItem(productId);
+                setTimeout(() => {
+                  router.push("/checkout");
+                }, 1500);
+              }}
+              fullWidth
+              color="primary"
+              disabled={quantity === 0}
+              variant="contained"
+            >
+              {quantity > 0 ? "Buy Now" : "Out of Stock"}
+            </Button>
+          </Grid>
+        </Grid>
       </Stack>
     </Card>
   );
