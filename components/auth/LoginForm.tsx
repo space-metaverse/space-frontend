@@ -15,7 +15,7 @@ import {
 } from "@space-metaverse-ag/space-ui";
 import { type AuthError, type LoginResponse, usePostLoginMutation } from "../../api/auth";
 import styled from "styled-components";
-import { setCookie, deleteCookie } from 'cookies-next'
+import { setCookie } from 'cookies-next'
 
 import { useRouter } from "next/navigation";
 
@@ -135,13 +135,14 @@ const LoginForm: React.FC = () => {
           window.location.href = `${decode}${checkForQuery ? '&' : '?'}loginCode=${loginCode}`;
         }
       }
+      window.localStorage.setItem("username", username);
+
       if (rememberMe) {
-        window.localStorage.setItem("username", username);
         window.localStorage.setItem("password", password);
       } else {
-        window.localStorage.removeItem("username");
         window.localStorage.removeItem("password");
       }
+
       router.push("/");
     }
   }, [
