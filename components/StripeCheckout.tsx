@@ -10,8 +10,6 @@ import {
   PaymentIntent,
   StripeElementsOptions,
 } from "@stripe/stripe-js";
-import { useEffect } from "react";
-import { usePostPaymentIntentMutation } from "../api/space";
 import { getClientUrl } from "../api/url";
 
 const stripePromise = loadStripe(
@@ -25,6 +23,8 @@ interface StripeCheckoutProps {
   submitText: string;
   onSuccess?: (paymentIntent: PaymentIntent) => void;
   onError?: (error: any) => void;
+  onIntentSuccess?: (paymentIntent: PaymentIntent) => void;
+  clientSecret?: string;
 }
 
 const StripeForm = ({
@@ -87,22 +87,8 @@ const StripeCheckout = ({
   submitText,
   onSuccess,
   onError,
+  clientSecret,
 }: StripeCheckoutProps) => {
-  const [
-    postPaymentIntent,
-    {
-      data: postPaymentIntentData,
-      isLoading: postPaymentIntentLoading,
-      isSuccess: postPaymentIntentSuccess,
-    },
-  ] = usePostPaymentIntentMutation();
-
-  const clientSecret = postPaymentIntentData?.clientSecret;
-
-  useEffect(() => {
-    postPaymentIntent({ amount, metadata });
-  }, [amount, metadata, postPaymentIntent]);
-
   if (!clientSecret) return null;
 
   const options: StripeElementsOptions = {
