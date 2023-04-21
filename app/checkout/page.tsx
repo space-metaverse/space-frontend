@@ -284,6 +284,7 @@ const Checkout = () => {
           address,
           email,
           telephone: phone,
+          time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         },
       });
     },
