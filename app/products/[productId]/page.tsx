@@ -6,6 +6,7 @@ import {
   CircularProgress,
   FormControl,
   InputLabel,
+  Link,
   MenuItem,
   Select,
   TextField,
@@ -19,7 +20,11 @@ import { Stack } from "@mui/system";
 import { useAppDispatch } from "../../../redux/hooks";
 import { addCartItem } from "../../../redux/slices/cart";
 import { usePathname, useRouter } from "next/navigation";
-import { useAddCartItemMutation, useGetProductQuery } from "../../../api/space";
+import {
+  useAddCartItemMutation,
+  useGetProductQuery,
+  useGetSpaceQuery,
+} from "../../../api/space";
 import { formatCurrency } from "../../../helpers";
 import miley from "../../../public/miley.png";
 
@@ -38,6 +43,18 @@ const ProductPage = () => {
   const { data, error, isLoading } = useGetProductQuery(
     { productId: String(productId) },
     { skip: !productId }
+  );
+
+  const {
+    data: spaceData,
+    error: spaceError,
+    isLoading: spaceLoading,
+    isSuccess: spaceSuccess,
+  } = useGetSpaceQuery(
+    { hubId: String(data?.product?.hub_sid) },
+    {
+      skip: !data?.product?.hub_sid,
+    }
   );
 
   const [
@@ -97,6 +114,21 @@ const ProductPage = () => {
               <Typography variant="h4" component="h1">
                 {data?.name}
               </Typography>
+              <Link href={`/spaces/${data?.product?.hub_sid}`}>
+                <Typography
+                  variant="subtitle1"
+                  component="h1"
+                  sx={{
+                    color: "blue  ",
+                    "&:hover": {
+                      textDecoration: "underline",
+                    },
+                    mt: 1,
+                  }}
+                >
+                  {spaceData?.name}
+                </Typography>
+              </Link>
               <Typography variant="h6" pt={3}>
                 {formatCurrency(Number(data?.price))}
               </Typography>

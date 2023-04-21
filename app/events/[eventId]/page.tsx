@@ -17,12 +17,17 @@ import { useEffect, useState } from "react";
 import { Stack } from "@mui/system";
 import { useAppDispatch } from "../../../redux/hooks";
 import { addCartItem } from "../../../redux/slices/cart";
-import { useAddCartItemMutation, useGetEventQuery } from "../../../api/space";
+import {
+  useAddCartItemMutation,
+  useGetEventQuery,
+  useGetSpaceQuery,
+} from "../../../api/space";
 import { usePathname, useRouter } from "next/navigation";
 import { Skeleton } from "@space-metaverse-ag/space-ui";
 import Countdown from "react-countdown";
 import LiveCountdown from "../../../components/LiveCountdown";
 import { formatCurrency } from "../../../helpers";
+import Link from "next/link";
 
 const sizes = ["Size 1", "Size 2", "Size 3"];
 
@@ -40,6 +45,18 @@ const EventPage = () => {
     isLoading: eventLoading,
     isSuccess: eventSuccess,
   } = useGetEventQuery({ event_sid: eventId });
+
+  const {
+    data: spaceData,
+    error: spaceError,
+    isLoading: spaceLoading,
+    isSuccess: spaceSuccess,
+  } = useGetSpaceQuery(
+    { hubId: String(eventData?.hub_sid) },
+    {
+      skip: !eventData?.hub_sid,
+    }
+  );
 
   const [
     postCartItem,
@@ -106,6 +123,21 @@ const EventPage = () => {
           <Typography variant="h3" component="h1">
             {eventData?.title}
           </Typography>
+          <Link href={`/spaces/${eventData?.hub_sid}`}>
+            <Typography
+              variant="subtitle1"
+              component="h1"
+              sx={{
+                color: "blue  ",
+                "&:hover": {
+                  textDecoration: "underline",
+                },
+                mt: 1,
+              }}
+            >
+              {spaceData?.name}
+            </Typography>
+          </Link>
           <Typography variant="body1" pt={3}>
             {eventData?.description}
           </Typography>

@@ -322,6 +322,7 @@ interface PostOrderRequest {
     address: string
     email: string
     telephone: string
+    time_zone: string
   }
 }
 
