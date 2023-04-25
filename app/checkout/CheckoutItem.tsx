@@ -1,8 +1,20 @@
-import { useDeleteCartItemMutation } from "../../api/space";
+import {
+  useDeleteCartItemMutation,
+  useGetSpaceQuery,
+  useUpdateCartItemMutation,
+} from "../../api/space";
 import { Delete } from "@mui/icons-material";
-import { Box, Typography } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Link,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import Image from "next/image";
+import { useState } from "react";
 
 interface CheckoutItemProps {
   id: string;
@@ -12,6 +24,7 @@ interface CheckoutItemProps {
   price: string;
   image: string;
   quantity: number;
+  description: string;
   refetchCart: () => void;
 }
 
@@ -23,8 +36,11 @@ const CheckoutItem = ({
   price,
   image,
   quantity,
+  description,
   refetchCart,
 }: CheckoutItemProps) => {
+  const [customQuantity, setCustomQuantity] = useState<number>(quantity);
+
   const [
     deleteCartItem,
     {
@@ -33,6 +49,27 @@ const CheckoutItem = ({
       isError: deleteCartItemError,
     },
   ] = useDeleteCartItemMutation();
+
+  const [
+    updateCartItem,
+    {
+      isLoading: updateCartItemLoading,
+      isSuccess: updateCartItemSuccess,
+      isError: updateCartItemError,
+    },
+  ] = useUpdateCartItemMutation();
+
+  const {
+    data: spaceData,
+    error: spaceError,
+    isLoading: spaceLoading,
+    isSuccess: spaceSuccess,
+  } = useGetSpaceQuery(
+    { hubId },
+    {
+      skip: !hubId,
+    }
+  );
 
   const handleDelete = async () => {
     await deleteCartItem({
@@ -46,8 +83,21 @@ const CheckoutItem = ({
     refetchCart();
   };
 
+  const handleQuantityChange = async (value: number) => {
+    setCustomQuantity(value);
+    await updateCartItem({
+      hub_sid: hubId,
+      item: {
+        ...(type === "ticket" && { timeslot_sid: id }),
+        ...(type === "product" && { product_variation_sid: id }),
+      },
+      quantity: value,
+    });
+    refetchCart();
+  };
+
   return (
-    <Box sx={{ p: 3, borderBottom: "1px #c9c9c9 solid" }}>
+    <Box sx={{ pt: 3, pb: 3, borderBottom: "1px #c9c9c9 solid" }}>
       <Grid container>
         <Grid xs={12} md={4}>
           <Image
@@ -59,21 +109,50 @@ const CheckoutItem = ({
           />
         </Grid>
         <Grid xs={12} md={7}>
-          <Typography variant="body1" pb={2} fontWeight={500}>
-            {type}
-          </Typography>
-          <Typography variant="h5" pb={2} fontWeight={500}>
+          <Typography variant="h5" fontWeight={500}>
             {title}
           </Typography>
-          <Typography variant="h5" fontWeight={500}>
-            {price}
+          <Link href={`/spaces/${hubId}`} style={{ textDecoration: "none" }}>
+            <Typography
+              variant="subtitle1"
+              component="h1"
+              sx={{
+                color: "blue  ",
+                textDecoration: "none",
+                "&:hover": {
+                  textDecoration: "underline",
+                },
+                mt: 0,
+              }}
+            >
+              {spaceData?.name}
+            </Typography>
+          </Link>
+
+          <Typography variant="body1" pt={2} pb={2}>
+            {description}
           </Typography>
-          <Typography variant="subtitle1" mt={2}>
-            Quantity: {quantity}
-          </Typography>
+          <TextField
+            sx={{ mt: 2, width: 200 }}
+            label="Quantity"
+            type="number"
+            value={customQuantity}
+            onChange={({ target }) =>
+              handleQuantityChange(Number(target.value))
+            }
+          />
         </Grid>
         <Grid xs={12} md={1}>
-          <Delete onClick={handleDelete} />
+          <Stack
+            justifyContent="space-between"
+            alignItems="flex-end"
+            height="100%"
+          >
+            <IconButton aria-label="delete" onClick={handleDelete}>
+              <Delete />
+            </IconButton>
+            <Typography variant="subtitle1">{price}</Typography>
+          </Stack>
         </Grid>
       </Grid>
     </Box>

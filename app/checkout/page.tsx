@@ -202,6 +202,7 @@ const Checkout = () => {
                   type: "product",
                   price: product?.data?.price,
                   quantity: entry?.quantity,
+                  description: product?.data?.product?.description,
                   image: product?.data?.thumbnail_url,
                 },
               ]);
@@ -356,7 +357,7 @@ const Checkout = () => {
         },
       })}
     >
-      <Typography variant="h3" align="center" p={3} fontWeight={500}>
+      <Typography variant="h3" align="center" p={5} fontWeight={500}>
         Checkout
       </Typography>
       <Stepper activeStep={activeStep}>
@@ -387,6 +388,7 @@ const Checkout = () => {
                   price={formatCurrency(Number(item.price))}
                   image={item.image}
                   quantity={item.quantity}
+                  description={item.description}
                   refetchCart={refreshCart}
                 />
               </Grid>

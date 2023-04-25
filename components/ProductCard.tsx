@@ -15,6 +15,8 @@ import { addCartItem } from "../redux/slices/cart";
 import spaceImage from "../public/space-store.png";
 import { formatCurrency } from "../helpers";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import Countdown from "react-countdown";
+import LiveCountdown from "./LiveCountdown";
 
 interface ProductCardProps {
   productId: string;
@@ -24,6 +26,8 @@ interface ProductCardProps {
   image: string;
   price: number;
   quantity: number;
+  startDate?: number;
+  endDate?: number;
 }
 
 const ProductCard = ({
@@ -34,6 +38,8 @@ const ProductCard = ({
   image,
   price,
   quantity,
+  startDate,
+  endDate,
 }: ProductCardProps) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -80,6 +86,20 @@ const ProductCard = ({
             />
           </CardMedia>
           <CardContent>
+            <Countdown
+              date={new Date(Number(startDate) * 1000).getTime()}
+              renderer={(props) => (
+                <LiveCountdown
+                  {...props}
+                  isLive={
+                    new Date(Number(startDate) * 1000).getTime() <
+                      new Date().getTime() &&
+                    new Date(Number(endDate) * 1000).getTime() >
+                      new Date().getTime()
+                  }
+                />
+              )}
+            />
             <Typography variant="body2" color="text.secondary">
               Product
             </Typography>
