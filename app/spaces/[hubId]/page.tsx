@@ -89,7 +89,14 @@ const Spaces = () => {
               >
                 {spaceData?.name}
               </Typography>
-              <a href={`https://metaverse-demo.com/${hubId}`} target="_blank">
+              <a
+                href={`${
+                  process.env.NEXT_PUBLIC_ENV === "prod"
+                    ? "https://app.tryspace.com"
+                    : "https://metaverse-demo.com"
+                }/${hubId}`}
+                target="_blank"
+              >
                 <Button
                   variant="contained"
                   endIcon={<RocketLaunchOutlinedIcon />}

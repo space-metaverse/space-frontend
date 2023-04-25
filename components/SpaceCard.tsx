@@ -68,14 +68,18 @@ const SpaceCard = ({
         </CardActionArea>
         <Grid container spacing={2}>
           <Grid xs={12}>
-            <Button
-              size="large"
-              onClick={() => router.push(`/spaces/${hubId}`)}
-              fullWidth
-              variant="contained"
+            <a
+              href={`${
+                process.env.NEXT_PUBLIC_ENV === "prod"
+                  ? "https://app.tryspace.com"
+                  : "https://metaverse-demo.com"
+              }/${hubId}`}
+              target="_blank"
             >
-              Jump In
-            </Button>
+              <Button size="large" fullWidth variant="contained">
+                Jump In
+              </Button>
+            </a>
           </Grid>
         </Grid>
       </Stack>
