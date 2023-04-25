@@ -339,7 +339,7 @@ const Checkout = () => {
     if (activeStep === CheckoutStep.Payment) {
       console.log(amount);
       postPaymentIntent({
-        amount,
+        amount: amount * 100,
         metadata: {
           type: "order",
         },
