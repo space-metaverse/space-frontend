@@ -12,6 +12,7 @@ const nextConfig = {
       'space-staging-assets.metaverse-demo.com',
       'hub-event-images.s3.us-east-2.amazonaws.com',
       'spaces-staging-assets.metaverse-demo.com',
+      'tryspace-prod-assets.tryspace-internal.com',
       'flagcdn.com'
     ],
   },
