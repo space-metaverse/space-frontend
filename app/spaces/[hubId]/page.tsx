@@ -127,7 +127,7 @@ const Spaces = () => {
                 product?.product_variation?.map((variation: any) => (
                   <Grid xs={12} md={6} key={variation.title}>
                     <ProductCard
-                      hubId={product.hub_id}
+                      hubId={product.hub_sid}
                       quantity={variation.quantity}
                       productId={variation.product_variation_sid}
                       title={product.name}

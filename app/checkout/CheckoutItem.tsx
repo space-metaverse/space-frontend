@@ -15,6 +15,8 @@ import {
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import Image from "next/image";
 import { useState } from "react";
+import Countdown from "react-countdown";
+import LiveCountdown from "../../components/LiveCountdown";
 
 interface CheckoutItemProps {
   id: string;
@@ -25,6 +27,8 @@ interface CheckoutItemProps {
   image: string;
   quantity: number;
   description: string;
+  startDate?: number;
+  endDate?: number;
   refetchCart: () => void;
 }
 
@@ -37,6 +41,8 @@ const CheckoutItem = ({
   image,
   quantity,
   description,
+  startDate,
+  endDate,
   refetchCart,
 }: CheckoutItemProps) => {
   const [customQuantity, setCustomQuantity] = useState<number>(quantity);
@@ -132,15 +138,33 @@ const CheckoutItem = ({
           <Typography variant="body1" pt={2} pb={2}>
             {description}
           </Typography>
-          <TextField
-            sx={{ mt: 2, width: 200 }}
-            label="Quantity"
-            type="number"
-            value={customQuantity}
-            onChange={({ target }) =>
-              handleQuantityChange(Number(target.value))
-            }
-          />
+          {!startDate && !endDate && (
+            <TextField
+              sx={{ mt: 2, width: 200 }}
+              label="Quantity"
+              type="number"
+              value={customQuantity}
+              onChange={({ target }) =>
+                handleQuantityChange(Number(target.value))
+              }
+            />
+          )}
+          {startDate && endDate && (
+            <Typography variant="h6" pt={3}>
+              <Countdown
+                date={new Date(startDate * 1000).getTime()}
+                renderer={(props) => (
+                  <LiveCountdown
+                    {...props}
+                    isLive={
+                      startDate < Math.round(new Date().getTime() / 1000) &&
+                      endDate > Math.round(new Date().getTime() / 1000)
+                    }
+                  />
+                )}
+              />
+            </Typography>
+          )}
         </Grid>
         <Grid xs={12} md={1}>
           <Stack

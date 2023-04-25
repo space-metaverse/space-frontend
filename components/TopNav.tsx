@@ -22,12 +22,14 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import GridViewIcon from "@mui/icons-material/GridView";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
+import { setCartItems } from "../redux/slices/cart";
+import { useGetCartItemsQuery } from "../api/space";
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -45,8 +47,23 @@ const TopNav = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [username, setUsername] = useState<string>("");
 
+  const dispatch = useAppDispatch();
+
   const router = useRouter();
   const cartItems = useAppSelector((state) => state.cart.items);
+
+  const {
+    data: cartData,
+    error: cartError,
+    isSuccess: cartSuccess,
+    isLoading: cartLoading,
+  } = useGetCartItemsQuery({});
+
+  useEffect(() => {
+    if (cartSuccess) {
+      dispatch(setCartItems(cartData?.data || []));
+    }
+  }, [cartData?.data, cartSuccess, dispatch]);
 
   const settings = [
     ...(!username ? [{ title: "Sign In", icon: <AccountCircleIcon /> }] : []),

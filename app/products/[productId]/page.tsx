@@ -177,9 +177,7 @@ const ProductPage = () => {
                     fullWidth
                     onClick={async () => {
                       await handleAddCartItem(productId);
-                      setTimeout(() => {
-                        router.push("/checkout");
-                      }, 1500);
+                      router.push("/checkout");
                     }}
                   >
                     Buy now
