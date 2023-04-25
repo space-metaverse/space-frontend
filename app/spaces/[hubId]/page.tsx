@@ -89,7 +89,14 @@ const Spaces = () => {
               >
                 {spaceData?.name}
               </Typography>
-              <a href={`https://metaverse-demo.com/${hubId}`} target="_blank">
+              <a
+                href={`${
+                  process.env.NEXT_PUBLIC_ENV === "prod"
+                    ? "https://app.tryspace.com"
+                    : "https://metaverse-demo.com"
+                }/${hubId}`}
+                target="_blank"
+              >
                 <Button
                   variant="contained"
                   endIcon={<RocketLaunchOutlinedIcon />}
@@ -127,7 +134,7 @@ const Spaces = () => {
                 product?.product_variation?.map((variation: any) => (
                   <Grid xs={12} md={6} key={variation.title}>
                     <ProductCard
-                      hubId={product.hub_id}
+                      hubId={product.hub_sid}
                       quantity={variation.quantity}
                       productId={variation.product_variation_sid}
                       title={product.name}

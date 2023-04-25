@@ -212,9 +212,7 @@ const EventPage = () => {
               disabled={!selectedTimeslot}
               onClick={async () => {
                 await handleAddCartItem();
-                setTimeout(() => {
-                  router.push("/checkout");
-                }, 1500);
+                router.push("/checkout");
               }}
             >
               Buy Ticket now

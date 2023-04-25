@@ -69,6 +69,12 @@ const Checkout = () => {
     refetch: refetchCart,
   } = useGetCartItemsQuery({});
 
+  useEffect(() => {
+    refetchCart();
+  }, [refetchCart]);
+
+  console.log(cartData);
+
   const [
     getProduct,
     {
@@ -194,7 +200,9 @@ const Checkout = () => {
             if (product?.isSuccess) {
               setSelectedHubId(entry?.hub_sid);
               setProducts((oldProducts: any) => [
-                ...oldProducts,
+                ...oldProducts.filter(
+                  (p: any) => p.id !== entry?.item?.product_variation_sid
+                ),
                 {
                   id: entry?.item?.product_variation_sid,
                   hubId: entry?.hub_sid,
@@ -214,7 +222,9 @@ const Checkout = () => {
             if (ticket?.isSuccess) {
               setSelectedHubId(entry?.hub_sid);
               setTickets((oldTickets: any) => [
-                ...oldTickets,
+                ...oldTickets.filter(
+                  (t: any) => t.id !== entry?.item?.timeslot_sid
+                ),
                 {
                   id: entry?.item?.timeslot_sid,
                   hubId: entry?.hub_sid,
@@ -223,6 +233,9 @@ const Checkout = () => {
                   price: ticket?.data?.price,
                   quantity: entry?.quantity,
                   image: ticket?.data?.event?.image_url,
+                  description: ticket?.data?.event?.description,
+                  startDate: ticket?.data?.start_date,
+                  endDate: ticket?.data?.end_date,
                 },
               ]);
             }
@@ -352,8 +365,8 @@ const Checkout = () => {
       sx={(theme: any) => ({
         minHeight: "80%",
         [theme.breakpoints.up("md")]: {
-          paddingRight: "15%",
-          paddingLeft: "15%",
+          paddingRight: "20%",
+          paddingLeft: "20%",
         },
       })}
     >
@@ -389,6 +402,8 @@ const Checkout = () => {
                   image={item.image}
                   quantity={item.quantity}
                   description={item.description}
+                  startDate={item.startDate}
+                  endDate={item.endDate}
                   refetchCart={refreshCart}
                 />
               </Grid>
@@ -698,7 +713,7 @@ const Checkout = () => {
       )}
 
       {activeStep === CheckoutStep.Result && (
-        <Box>
+        <Box mt={3}>
           {postOrderSuccess && (
             <Alert severity="success">
               Your order has been placed successfully!
