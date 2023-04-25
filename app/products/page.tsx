@@ -36,6 +36,8 @@ const ProductsPage = () => {
                 }
                 price={product.product_variations?.[0]?.price}
                 quantity={product.product_variations?.[0]?.quantity}
+                startDate={product.start_date}
+                endDate={product.end_date}
               />
             </Grid>
           ))

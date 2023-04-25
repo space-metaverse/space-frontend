@@ -265,6 +265,25 @@ interface AddCartItemResponse {
   quantity: number
 }
 
+interface UpdateCartItemRequest {
+  hub_sid: string
+  item: {
+    product_variation_sid?: string
+    timeslot_sid?: string
+  },
+  quantity: number
+}
+
+interface UpdateCartItemResponse {
+  account_id: string
+  hub_sid: string
+  item: {
+    product_variation_sid?: string
+    timeslot_sid?: string
+  },
+  quantity: number
+}
+
 interface GetCartResponse {
   data: Array<{
     id: number
@@ -549,6 +568,16 @@ export const spaceApi = createApi({
         }
       })
     }),
+    updateCartItem: builder.mutation<UpdateCartItemResponse, UpdateCartItemRequest>({
+      query: (body) => ({
+        url: `/api/v1/cart_items/change`,
+        method: 'POST',
+        body: {
+          ...body,
+          account_id: window.localStorage.getItem('accountId') as string
+        }
+      })
+    }),
   })
 })
 
@@ -577,5 +606,6 @@ export const {
   useGetTicketQuery,
   useLazyGetTicketQuery,
   useGetEventsBySpaceQuery,
-  usePostTicketTimerMutation
+  usePostTicketTimerMutation,
+  useUpdateCartItemMutation,
 } = spaceApi

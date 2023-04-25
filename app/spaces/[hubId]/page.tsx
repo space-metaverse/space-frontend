@@ -134,6 +134,8 @@ const Spaces = () => {
                       owner={product.created_by}
                       image={variation.thumbnail_url}
                       price={variation.price}
+                      startDate={product.start_date}
+                      endDate={product.end_date}
                     />
                   </Grid>
                 ))
