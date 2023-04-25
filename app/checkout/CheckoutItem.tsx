@@ -78,7 +78,7 @@ const CheckoutItem = ({
         ...(type === "ticket" && { timeslot_sid: id }),
         ...(type === "product" && { product_variation_sid: id }),
       },
-      quantity: 1,
+      quantity,
     });
     refetchCart();
   };
