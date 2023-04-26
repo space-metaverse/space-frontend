@@ -26,7 +26,7 @@ import {
   useGetSpaceQuery,
 } from "../../../api/space";
 import { formatCurrency } from "../../../helpers";
-import miley from "../../../public/miley.png";
+import missingImage from "../../../public/missing-image.jpg";
 
 const sizes = ["Size 1", "Size 2", "Size 3"];
 
@@ -102,7 +102,7 @@ const ProductPage = () => {
                 src={
                   data?.thumbnail_url.startsWith("http")
                     ? data?.thumbnail_url
-                    : miley
+                    : missingImage
                 }
                 alt={"header"}
                 width={500}

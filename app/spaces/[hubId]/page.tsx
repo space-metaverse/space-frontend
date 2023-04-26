@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useGetEventsBySpaceQuery, useGetSpaceQuery } from "../../../api/space";
 import headerImage from "../../../public/space-header.png";
-import nikeImage from "../../../public/nike.png";
+import missingImage from "../../../public/missing-image.jpg";
 import ProductCard from "../../../components/ProductCard";
 import EventCard from "../../../components/EventCard";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
@@ -61,7 +61,7 @@ const Spaces = () => {
             }}
           >
             <Image
-              src={spaceData?.screenshot_url || nikeImage}
+              src={spaceData?.screenshot_url || missingImage}
               width={150}
               height={150}
               alt={"header"}
