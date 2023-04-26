@@ -5,11 +5,7 @@ import {
   useElements,
   Elements,
 } from "@stripe/react-stripe-js";
-import {
-  loadStripe,
-  PaymentIntent,
-  StripeElementsOptions,
-} from "@stripe/stripe-js";
+import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 import { getClientUrl } from "../api/url";
 
 const stripePromise = loadStripe(
@@ -21,9 +17,8 @@ interface StripeCheckoutProps {
   amount: number;
   returnUrl?: string;
   submitText: string;
-  onSuccess?: (paymentIntent: PaymentIntent) => void;
+  onSuccess?: (paymentIntentId: string) => void;
   onError?: (error: any) => void;
-  onIntentSuccess?: (paymentIntent: PaymentIntent) => void;
   clientSecret?: string;
 }
 
@@ -54,7 +49,7 @@ const StripeForm = ({
     });
 
     if (!error) {
-      onSuccess && onSuccess(paymentIntent);
+      onSuccess && onSuccess(paymentIntent.id);
       return;
     } else {
       onError && onError(error);
