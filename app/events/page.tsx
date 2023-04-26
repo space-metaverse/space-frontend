@@ -18,7 +18,7 @@ const Events = () => {
             <CircularProgress />
           </Stack>
         ) : (
-          data?.data?.map((event, index) => (
+          data?.data?.slice()?.sort((a, b) => Number(b.start_date) - Number(a.start_date)).map((event, index) => (
             <Grid xs={12} md={3} key={event.event_sid + index}>
               <EventCard
                 id={event.event_sid}

@@ -5,6 +5,7 @@ import {
 } from "../../api/space";
 import { Delete } from "@mui/icons-material";
 import {
+  Alert,
   Box,
   IconButton,
   Link,
@@ -29,6 +30,7 @@ interface CheckoutItemProps {
   description: string;
   startDate?: number;
   endDate?: number;
+  error?: string;
   refetchCart: () => void;
 }
 
@@ -43,6 +45,7 @@ const CheckoutItem = ({
   description,
   startDate,
   endDate,
+  error,
   refetchCart,
 }: CheckoutItemProps) => {
   const [customQuantity, setCustomQuantity] = useState<number>(quantity);
@@ -178,6 +181,11 @@ const CheckoutItem = ({
             <Typography variant="subtitle1">{price}</Typography>
           </Stack>
         </Grid>
+        {error && (
+          <Grid xs={12}>
+            <Alert severity="error">{error}</Alert>
+          </Grid>
+        )}
       </Grid>
     </Box>
   );

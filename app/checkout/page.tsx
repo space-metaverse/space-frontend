@@ -27,6 +27,7 @@ import {
   useLazyGetTicketQuery,
   usePostTicketTimerMutation,
   usePostPaymentIntentMutation,
+  useDeleteCartItemMutation,
 } from "../../api/space";
 import { formatCurrency } from "../../helpers";
 import { MuiTelInput } from "mui-tel-input";
@@ -73,8 +74,6 @@ const Checkout = () => {
     refetchCart();
   }, [refetchCart]);
 
-  console.log(cartData);
-
   const [
     getProduct,
     {
@@ -103,7 +102,8 @@ const Checkout = () => {
     {
       isLoading: postTicketTimerLoading,
       isSuccess: postTicketTimerSuccess,
-      isError: postTicketTimerError,
+      isError: postTicketTimerIsError,
+      error: postTicketTimerError,
     },
   ] = usePostTicketTimerMutation();
 
@@ -115,6 +115,15 @@ const Checkout = () => {
       isSuccess: postPaymentIntentSuccess,
     },
   ] = usePostPaymentIntentMutation();
+
+  const [
+    deleteCartItem,
+    {
+      isLoading: deleteCartItemLoading,
+      isSuccess: deleteCartItemSuccess,
+      isError: deleteCartItemError,
+    },
+  ] = useDeleteCartItemMutation();
 
   const isShippingValid = useMemo(() => {
     setShippingErrors({});
@@ -179,12 +188,53 @@ const Checkout = () => {
   }, [address, city, country, email, name, phone, region, zipCode]);
 
   useEffect(() => {
-    tickets.forEach(async (ticket: any) => {
-      await postTicketTimer({
-        tickets: tickets.map((ticket: any) => ticket.id),
+    tickets
+      .filter((t: any) => !t.timerRan)
+      ?.forEach(async (ticket: any) => {
+        const response: any = await postTicketTimer({
+          tickets: tickets.map((ticket: any) => ticket.id),
+        });
+
+        if (response.error) {
+          const errors = response.error?.data?.errors;
+          if (errors?.length > 0) {
+            errors.forEach((e: any) => {
+              const { reason, timeslot_sid } = e;
+              const timeSlot = tickets.find((t: any) => timeslot_sid === t.id);
+
+              setTickets((oldTickets: any) => [
+                ...oldTickets.filter((t: any) => t.id !== timeSlot.id),
+                {
+                  ...timeSlot,
+                  error: reason,
+                  timerRan: true,
+                },
+              ]);
+
+              if (reason === "event_was_ended") {
+                deleteCartItem({
+                  hub_sid: timeSlot.hubId,
+                  item: {
+                    timeslot_sid: timeSlot.id,
+                  },
+                  quantity: timeSlot.quantity,
+                });
+              }
+            });
+          }
+        } else {
+          setTickets((oldTickets: any) => [
+            ...oldTickets.filter((t: any) => t.id !== ticket.id),
+            {
+              ...ticket,
+              timerRan: true,
+            },
+          ]);
+        }
+
+        console.log("response", response);
       });
-    });
-  }, [postTicketTimer, tickets]);
+  }, [deleteCartItem, postTicketTimer, tickets]);
 
   useEffect(() => {
     setProducts([]);
@@ -255,8 +305,6 @@ const Checkout = () => {
     );
   }, [products, selectedHubId, tickets]);
 
-  console.log(products, tickets);
-
   const amount = useMemo(() => {
     return [...products, ...tickets]
       .filter((p: any) => p.hubId === selectedHubId)
@@ -267,7 +315,6 @@ const Checkout = () => {
 
   const handleStripeIntentSuccess = useCallback(
     (paymentIntent: PaymentIntent) => {
-      console.log(paymentIntent);
       postOrder({
         data: {
           account_id: window.localStorage.getItem("accountId") as string,
@@ -337,7 +384,6 @@ const Checkout = () => {
 
   useEffect(() => {
     if (activeStep === CheckoutStep.Payment) {
-      console.log(amount);
       postPaymentIntent({
         amount: amount * 100,
         metadata: {
@@ -404,6 +450,7 @@ const Checkout = () => {
                   description={item.description}
                   startDate={item.startDate}
                   endDate={item.endDate}
+                  error={item.error}
                   refetchCart={refreshCart}
                 />
               </Grid>
@@ -433,17 +480,10 @@ const Checkout = () => {
             size="large"
             variant="contained"
             sx={{ mt: 2 }}
-            disabled={!amount || !selectedHubId || postTicketTimerError}
+            disabled={!amount || !selectedHubId || postTicketTimerIsError}
           >
             Continue to Shipping
           </Button>
-
-          {postTicketTimerError && (
-            <Alert severity="error" sx={{ mt: 3 }}>
-              Ticket timer has expired. Please delete the ticket and try to buy
-              another one.
-            </Alert>
-          )}
         </>
       )}
 
