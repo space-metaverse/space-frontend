@@ -33,7 +33,6 @@ import { formatCurrency } from "../../helpers";
 import { MuiTelInput } from "mui-tel-input";
 import Image from "next/image";
 import { allCountries } from "country-region-data";
-import { PaymentIntent } from "@stripe/stripe-js";
 import Link from "next/link";
 
 enum CheckoutStep {
@@ -188,55 +187,6 @@ const Checkout = () => {
   }, [address, city, country, email, name, phone, region, zipCode]);
 
   useEffect(() => {
-    tickets
-      .filter((t: any) => !t.timerRan)
-      ?.forEach(async (ticket: any) => {
-        const response: any = await postTicketTimer({
-          tickets: tickets.map((ticket: any) => ticket.id),
-        });
-
-        if (response.error) {
-          const errors = response.error?.data?.errors;
-          if (errors?.length > 0) {
-            errors.forEach((e: any) => {
-              const { reason, timeslot_sid } = e;
-              const timeSlot = tickets.find((t: any) => timeslot_sid === t.id);
-
-              setTickets((oldTickets: any) => [
-                ...oldTickets.filter((t: any) => t.id !== timeSlot.id),
-                {
-                  ...timeSlot,
-                  error: reason,
-                  timerRan: true,
-                },
-              ]);
-
-              if (reason === "event_was_ended") {
-                deleteCartItem({
-                  hub_sid: timeSlot.hubId,
-                  item: {
-                    timeslot_sid: timeSlot.id,
-                  },
-                  quantity: timeSlot.quantity,
-                });
-              }
-            });
-          }
-        } else {
-          setTickets((oldTickets: any) => [
-            ...oldTickets.filter((t: any) => t.id !== ticket.id),
-            {
-              ...ticket,
-              timerRan: true,
-            },
-          ]);
-        }
-
-        console.log("response", response);
-      });
-  }, [deleteCartItem, postTicketTimer, tickets]);
-
-  useEffect(() => {
     setProducts([]);
     setTickets([]);
 
@@ -314,7 +264,7 @@ const Checkout = () => {
   }, [products, selectedHubId, tickets]);
 
   const handleStripeIntentSuccess = useCallback(
-    (paymentIntent: PaymentIntent) => {
+    (paymentIntentId: string) => {
       postOrder({
         data: {
           account_id: window.localStorage.getItem("accountId") as string,
@@ -324,7 +274,7 @@ const Checkout = () => {
           status: "payment_processing",
           live_mode: false,
           hub_sid: selectedHubId,
-          payment_id: paymentIntent.id,
+          payment_id: paymentIntentId,
           products: products
             .filter((p: any) => p.hubId === selectedHubId)
             .map((product: any) => ({
@@ -367,7 +317,7 @@ const Checkout = () => {
     ]
   );
 
-  const handleStripeSuccess = (paymentIntent: PaymentIntent) => {
+  const handleStripeSuccess = () => {
     setActiveStep(CheckoutStep.Result);
   };
 
@@ -383,6 +333,49 @@ const Checkout = () => {
   };
 
   useEffect(() => {
+    tickets
+      .filter((t: any) => !t.timerRan)
+      ?.forEach(async (ticket: any) => {
+        const response: any = await postTicketTimer({
+          tickets: tickets.map((ticket: any) => ticket.id),
+        });
+
+        if (response.error) {
+          const errors = response.error?.data?.errors;
+          if (errors?.length > 0) {
+            errors.forEach((e: any) => {
+              const { reason, payment_id } = e;
+
+              if (reason === "existing_checkout") {
+                handleStripeIntentSuccess(payment_id);
+                setActiveStep(CheckoutStep.Payment);
+              }
+
+              setTickets((oldTickets: any) => [
+                ...oldTickets.filter((t: any) => t.id !== ticket.id),
+                {
+                  ...ticket,
+                  error: reason,
+                  timerRan: true,
+                },
+              ]);
+            });
+          }
+        } else {
+          setTickets((oldTickets: any) => [
+            ...oldTickets.filter((t: any) => t.id !== ticket.id),
+            {
+              ...ticket,
+              timerRan: true,
+            },
+          ]);
+        }
+
+        console.log("response", response);
+      });
+  }, [deleteCartItem, handleStripeIntentSuccess, postTicketTimer, tickets]);
+
+  useEffect(() => {
     if (activeStep === CheckoutStep.Payment) {
       postPaymentIntent({
         amount: amount * 100,
@@ -395,7 +388,7 @@ const Checkout = () => {
 
   useEffect(() => {
     if (postPaymentIntentSuccess && postPaymentIntentData) {
-      handleStripeIntentSuccess(postPaymentIntentData);
+      handleStripeIntentSuccess(postPaymentIntentData.id);
     }
   }, [
     postPaymentIntentSuccess,
@@ -738,7 +731,6 @@ const Checkout = () => {
             submitText={"Finish Payment"}
             onSuccess={handleStripeSuccess}
             onError={handleStripeError}
-            onIntentSuccess={handleStripeIntentSuccess}
             clientSecret={postPaymentIntentData?.clientSecret}
           />
           <Stack flexDirection="row" justifyContent="space-between" mt={3}>
