@@ -6,7 +6,7 @@ import EventCard from "../EventCard"
 const Events = () => {
   const { data, error, isLoading } = useGetAllEventsQuery({})
 
-  const eventSlides = data?.data?.reduce((all: any, one: any, i) => {
+  const eventSlides = data?.data?.slice()?.sort((a, b) => Number(b.start_date) - Number(a.start_date)).reduce((all: any, one: any, i) => {
     const ch = Math.floor(i / 3);
     all[ch] = [].concat((all[ch] || []), one);
     return all
