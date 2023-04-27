@@ -43,9 +43,13 @@ const Spaces = () => {
         sx={(theme) => ({
           paddingRight: "1rem",
           paddingLeft: "1rem",
-          [theme.breakpoints.up("md")]: {
-            paddingRight: "15%",
-            paddingLeft: "15%",
+          [theme.breakpoints.up("lg")]: {
+            paddingRight: "5%",
+            paddingLeft: "5%",
+          },
+          [theme.breakpoints.up("xl")]: {
+            paddingRight: "14%",
+            paddingLeft: "14%",
           },
           minHeight: "50vh",
           mt: 2,
