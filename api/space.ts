@@ -389,9 +389,6 @@ export const spaceApi = createApi({
       query: ({ hubId }) => ({
         url: `/api/v1/hubs/?hub_id=${hubId}`,
         method: 'GET',
-        headers: {
-          Authorization: `Bearer ${window.localStorage.getItem('hubsToken')}`
-        }
       })
     }),
     getShippingZones: builder.query<any, GetShippingZoneRequest>({
