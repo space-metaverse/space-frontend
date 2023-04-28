@@ -140,9 +140,11 @@ const EventPage = () => {
             {eventData?.start_date && (
               <EventCalendar
                 month={
-                  shortMonths[new Date(eventData?.start_date / 1000).getMonth()]
+                  shortMonths[
+                    new Date(eventData?.start_date * 1000).getMonth() + 1
+                  ]
                 }
-                day={new Date(eventData?.start_date / 1000).getDay()}
+                day={new Date(eventData?.start_date * 1000).getDate()}
               />
             )}
             <Stack pl={4}>
