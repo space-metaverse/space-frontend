@@ -27,6 +27,8 @@ import {
 } from "../../../api/space";
 import { formatCurrency } from "../../../helpers";
 import missingImage from "../../../public/missing-image.jpg";
+import Countdown from "react-countdown";
+import LiveCountdown from "../../../components/LiveCountdown";
 
 const sizes = ["Size 1", "Size 2", "Size 3"];
 
@@ -82,6 +84,10 @@ const ProductPage = () => {
     );
   };
 
+  const isLive =
+    new Date(Number(data?.product?.start_date) * 1000).getTime() <
+    new Date().getTime();
+
   return (
     <Box pb={0}>
       {isLoading && (
@@ -135,6 +141,18 @@ const ProductPage = () => {
               <Typography variant="body1" pt={3}>
                 {data?.product?.description}
               </Typography>
+              {data?.product?.start_date && (
+                <Box mt={3}>
+                  <Countdown
+                    date={new Date(
+                      Number(data?.product?.start_date) * 1000
+                    ).getTime()}
+                    renderer={(props) => (
+                      <LiveCountdown {...props} isLive={isLive} />
+                    )}
+                  />
+                </Box>
+              )}
               <Stack flexDirection="row" gap={3} mt={10}>
                 <FormControl fullWidth>
                   <InputLabel id="size-label">Size</InputLabel>
@@ -165,24 +183,33 @@ const ProductPage = () => {
                   size="large"
                   fullWidth
                   onClick={() => handleAddCartItem(productId)}
-                  disabled={postCartItemLoading || data?.quantity === 0}
+                  disabled={
+                    postCartItemLoading ||
+                    data?.quantity === 0 ||
+                    (data?.product?.start_date && !isLive) ||
+                    false
+                  }
                 >
                   {data?.quantity > 0 ? "Add to Cart" : "Out of Stock"}
                 </Button>
-                {data?.quantity > 0 && (
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    size="large"
-                    fullWidth
-                    onClick={async () => {
-                      await handleAddCartItem(productId);
-                      router.push("/checkout");
-                    }}
-                  >
-                    Buy now
-                  </Button>
-                )}
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="large"
+                  fullWidth
+                  onClick={async () => {
+                    await handleAddCartItem(productId);
+                    router.push("/checkout");
+                  }}
+                  disabled={
+                    postCartItemLoading ||
+                    data?.quantity === 0 ||
+                    (data?.product?.start_date && !isLive) ||
+                    false
+                  }
+                >
+                  Buy now
+                </Button>
               </Stack>
             </Grid>
           </Grid>
