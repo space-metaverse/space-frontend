@@ -28,6 +28,7 @@ import Countdown from "react-countdown";
 import LiveCountdown from "../../../components/LiveCountdown";
 import { formatCurrency } from "../../../helpers";
 import Link from "next/link";
+import EventCalendar from "../../../components/EventCalendar";
 
 const sizes = ["Size 1", "Size 2", "Size 3"];
 
@@ -98,6 +99,21 @@ const EventPage = () => {
     );
   };
 
+  const shortMonths = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
   return (
     <Box>
       <Image
@@ -120,24 +136,36 @@ const EventPage = () => {
           )}
         </Grid>
         <Grid xs={12} md={6} p={5}>
-          <Typography variant="h3" component="h1">
-            {eventData?.title}
-          </Typography>
-          <Link href={`/spaces/${eventData?.hub_sid}`}>
-            <Typography
-              variant="subtitle1"
-              component="h1"
-              sx={{
-                color: "blue  ",
-                "&:hover": {
-                  textDecoration: "underline",
-                },
-                mt: 1,
-              }}
-            >
-              {spaceData?.name}
-            </Typography>
-          </Link>
+          <Stack direction="row" alignItems="center">
+            {eventData?.start_date && (
+              <EventCalendar
+                month={
+                  shortMonths[new Date(eventData?.start_date / 1000).getMonth()]
+                }
+                day={new Date(eventData?.start_date / 1000).getDay()}
+              />
+            )}
+            <Stack pl={4}>
+              <Typography variant="h3" component="h1">
+                {eventData?.title}
+              </Typography>
+              <Link href={`/spaces/${eventData?.hub_sid}`}>
+                <Typography
+                  variant="subtitle1"
+                  component="h1"
+                  sx={{
+                    color: "blue  ",
+                    "&:hover": {
+                      textDecoration: "underline",
+                    },
+                    mt: 1,
+                  }}
+                >
+                  {spaceData?.name}
+                </Typography>
+              </Link>
+            </Stack>
+          </Stack>
           <Typography variant="body1" pt={3}>
             {eventData?.description}
           </Typography>
