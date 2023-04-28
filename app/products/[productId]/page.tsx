@@ -70,7 +70,7 @@ const ProductPage = () => {
 
   const handleAddCartItem = async (productId: string) => {
     await postCartItem({
-      hub_sid: "SgPdAJP",
+      hub_sid: data?.product?.hub_sid,
       item: {
         product_variation_sid: productId,
       },
