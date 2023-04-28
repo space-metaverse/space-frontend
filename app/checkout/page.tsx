@@ -264,7 +264,7 @@ const Checkout = () => {
   }, [products, selectedHubId, tickets]);
 
   const handleStripeIntentSuccess = useCallback(
-    (paymentIntentId: string) => {
+    (paymentIntentId: string, clientSecret: string) => {
       postOrder({
         data: {
           account_id: window.localStorage.getItem("accountId") as string,
@@ -275,6 +275,7 @@ const Checkout = () => {
           live_mode: false,
           hub_sid: selectedHubId,
           payment_id: paymentIntentId,
+          client_secret: clientSecret,
           products: products
             .filter((p: any) => p.hubId === selectedHubId)
             .map((product: any) => ({
@@ -344,10 +345,10 @@ const Checkout = () => {
           const errors = response.error?.data?.errors;
           if (errors?.length > 0) {
             errors.forEach((e: any) => {
-              const { reason, payment_id } = e;
+              const { reason, payment_id, client_secret } = e;
 
               if (reason === "existing_checkout") {
-                handleStripeIntentSuccess(payment_id);
+                handleStripeIntentSuccess(payment_id, client_secret);
                 setActiveStep(CheckoutStep.Payment);
               }
 
@@ -388,7 +389,7 @@ const Checkout = () => {
 
   useEffect(() => {
     if (postPaymentIntentSuccess && postPaymentIntentData) {
-      handleStripeIntentSuccess(postPaymentIntentData.id);
+      handleStripeIntentSuccess(postPaymentIntentData.id, postPaymentIntentData.clientSecret);
     }
   }, [
     postPaymentIntentSuccess,
