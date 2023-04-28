@@ -6,6 +6,7 @@ import {
   Button,
   Stack,
   CardActionArea,
+  Box,
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -69,6 +70,9 @@ const ProductCard = ({
     );
   };
 
+  const isLive =
+    new Date(Number(startDate) * 1000).getTime() < new Date().getTime();
+
   return (
     <Card sx={{ height: "100%", borderRadius: 3 }}>
       <Stack height="100%" justifyContent="space-between">
@@ -86,20 +90,6 @@ const ProductCard = ({
             />
           </CardMedia>
           <CardContent>
-            <Countdown
-              date={new Date(Number(startDate) * 1000).getTime()}
-              renderer={(props) => (
-                <LiveCountdown
-                  {...props}
-                  isLive={
-                    new Date(Number(startDate) * 1000).getTime() <
-                      new Date().getTime() &&
-                    new Date(Number(endDate) * 1000).getTime() >
-                      new Date().getTime()
-                  }
-                />
-              )}
-            />
             <Typography variant="body2" color="text.secondary">
               Product
             </Typography>
@@ -112,6 +102,16 @@ const ProductCard = ({
             <Typography variant="body1">
               {formatCurrency(Number(price) ?? 0)}
             </Typography>
+            {startDate && (
+              <Box mt={1}>
+                <Countdown
+                  date={new Date(Number(startDate) * 1000).getTime()}
+                  renderer={(props) => (
+                    <LiveCountdown {...props} isLive={isLive} />
+                  )}
+                />
+              </Box>
+            )}
           </CardContent>
         </CardActionArea>
         <Grid container spacing={2}>
@@ -122,7 +122,7 @@ const ProductCard = ({
               fullWidth
               color="secondary"
               variant="outlined"
-              disabled={quantity === 0}
+              disabled={quantity === 0 || (startDate && !isLive) || false}
             >
               Add to Cart
             </Button>
@@ -136,7 +136,7 @@ const ProductCard = ({
               }}
               fullWidth
               color="primary"
-              disabled={quantity === 0}
+              disabled={quantity === 0 || (startDate && !isLive) || false}
               variant="contained"
             >
               {quantity > 0 ? "Buy Now" : "Out of Stock"}
