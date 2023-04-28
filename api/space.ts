@@ -325,6 +325,7 @@ interface PostOrderRequest {
     live_mode: boolean
     hub_sid: string
     payment_id: string
+    client_secret: string
     products: Array<{
       product_variation_sid: string
       quantity: number
