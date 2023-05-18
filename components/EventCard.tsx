@@ -89,7 +89,7 @@ const EventCard = ({
             />
           </CardContent>
         </CardActionArea>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} p={2}>
           <Grid xs={12} lg={6}>
             <Button
               size="medium"
